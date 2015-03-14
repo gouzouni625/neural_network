@@ -1,0 +1,28 @@
+/* Network's and program's parameters */
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
+
+#define NUMBER_OF_SAMPLES 60000
+#define NUMBER_OF_TESTING_SAMPLES 10000
+
+#define TOTAL_EPOCHS 50001
+#define BATCH_SIZE 1000
+#define GAMMA 0.5
+#define LAMBDA 0
+
+#define DISTORT_FREQUENCY 10
+
+#define EVALUATE_FREQUENCY 5
+#define SAVE_FREQUENCY 5
+
+#define CONCURRENT_SAMPLES BATCH_SIZE
+
+#define MAX_THREADS_PER_BLOCK 512
+#define MAX_BLOCKS_PER_GRID 65535
+
+#define MAX_SIZE_OF_LAYER 784
+#define MAX_CONCURRENT_SAMPLES 1000
+
+#define NUMBER_OF_LAYERS 3
+
+#endif
