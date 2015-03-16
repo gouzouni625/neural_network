@@ -21,13 +21,13 @@ int main()
 
   // Loading the training set on the CPU.
   std::ifstream trainingSetFile, trainingLabelsFile;
-  trainingSetFile.open("../data/train-images.idx3-ubyte", std::ios::in);
+  trainingSetFile.open("../../../data/train-images.idx3-ubyte", std::ios::in);
   if(!trainingSetFile.is_open())
   {
     std::cout << "CANNOT OPEN TRAINING SET'S FILE..." << std::endl;
     exit(1);
   }
-  trainingLabelsFile.open("../data/train-labels.idx1-ubyte", std::ios::in);
+  trainingLabelsFile.open("../../../data/train-labels.idx1-ubyte", std::ios::in);
   if(!trainingSetFile.is_open())
   {
     std::cout << "CANNOT OPEN TRAINING LABELS' FILE..." << std::endl;
@@ -57,13 +57,13 @@ int main()
 
   // Testing files and variables.
   std::ifstream testingSetFile, testingLabelsFile;
-  testingSetFile.open("../data/t10k-images.idx3-ubyte", std::ios::in);
+  testingSetFile.open("../../../data/t10k-images.idx3-ubyte", std::ios::in);
   if(!testingSetFile.is_open())
   {
     std::cout << "CANNOT OPEN TESTING SET'S FILE..." << std::endl;
     exit(1);
   }
-  testingLabelsFile.open("../data/t10k-labels.idx1-ubyte", std::ios::in);
+  testingLabelsFile.open("../../../data/t10k-labels.idx1-ubyte", std::ios::in);
   if(!testingLabelsFile.is_open())
   {
     std::cout << "CANNOT OPEN TESTING LABELS' FILE..." << std::endl;
@@ -121,7 +121,7 @@ int main()
     }
 
     std::cout << counter << " correct answers!" << std::endl;
-    std::cout << (double)counter / 100 << "\% accurasy!" << std::endl;
+    std::cout << (double)counter / 100 << "\% accuracy!" << std::endl;
   }
 
   net.saveNetwork();
@@ -141,4 +141,5 @@ int main()
   }
   delete[] trainingSet;
   delete[] trainingLabels;
+
 }
