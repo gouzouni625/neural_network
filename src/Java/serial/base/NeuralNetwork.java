@@ -1,3 +1,9 @@
+package base;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.Math;
 
 public class NeuralNetwork{
@@ -67,7 +73,7 @@ public class NeuralNetwork{
     // Training the network.
     for(int iteration = 0;iteration < numberOfIterations;iteration++){
 
-      // Calculating the derivative of the const function for each sample.
+      // Calculating the derivative of the cost function for each sample.
       for(int sample = 0;sample < trainingSetSize;sample++){
         this.backPropagation(trainingSet[sample], labels[sample], nablaTheta);
       }
@@ -99,11 +105,57 @@ public class NeuralNetwork{
     return numberOfLayers_;
   }
 
-  public void saveNetwork(){
-
+  public void saveNetwork(String fileName){
+    FileOutputStream fileOutputStream = null;
+    DataOutputStream dataOutputStream = null;
+    
+    try{
+      fileOutputStream = new FileOutputStream(fileName);
+      dataOutputStream = new DataOutputStream(fileOutputStream);
+  
+      for(int i = 0;i < numberOfLayers_ - 1;i++){
+        for(int j = 0;j < sizesOfLayers_[i + 1];j++){
+          dataOutputStream.writeDouble(biases_[i][j]);
+          
+          for(int k = 0;k < sizesOfLayers_[i];k++){
+            dataOutputStream.writeDouble(weights_[i][j][k]);
+          }
+        }
+      }
+      
+      System.out.print("The network was successfully saved in file");
+      System.out.println(" " + fileName);
+    }
+    catch(Exception e){
+      System.out.println("Error while trying to save the network.");
+      System.out.println("The network was not saved.");
+    }
   }
 
-  public void loadNetwork(){
+  public void loadNetwork(String fileName){
+    FileInputStream fileInputStream = null;
+    DataInputStream dataInputStream = null;
+    
+    try{
+      fileInputStream = new FileInputStream(fileName);
+      dataInputStream = new DataInputStream(fileInputStream);
+      
+      for(int i = 0;i < numberOfLayers_ - 1;i++){
+        for(int j = 0;j < sizesOfLayers_[i + 1];j++){
+          biases_[i][j] = dataInputStream.readDouble();
+          
+          for(int k = 0;k < sizesOfLayers_[i];k++){
+            weights_[i][j][k] = dataInputStream.readDouble();
+          }
+        }
+      }
+      
+      System.out.print("A network was successfully loaded from file");
+      System.out.println(" " + fileName);
+    }
+    catch(Exception e){
+      System.out.println("Error while trying to load a network.");
+    }
 
   }
 
@@ -179,5 +231,4 @@ public class NeuralNetwork{
 
   private double[][][] weights_;
   private double[][] biases_;
-
 };

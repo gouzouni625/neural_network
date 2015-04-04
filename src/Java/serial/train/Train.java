@@ -1,14 +1,17 @@
+package train;
+
 import java.io.*;
 import java.util.Arrays;
 
-public class Main{ 
+import base.NeuralNetwork;
+
+public class Train{ 
 
   public static void main(String[] args) throws Exception{
-
     // Set some parameters.
     int numberOfTrainingSamples = 60000;
     int numberOfTestingSamples = 10000;
-    int numberOfEpochs = 200;
+    int numberOfEpochs = 20;
     int batchSize = 1000;
     double gamma = 0.25;
 
@@ -18,8 +21,8 @@ public class Main{
 
 
     // Load the training set.
-    FileInputStream trainingSetStream = new FileInputStream("../../../data/train-images.idx3-ubyte");
-    FileInputStream trainingLabelsStream = new FileInputStream("../../../data/train-labels.idx1-ubyte");
+    FileInputStream trainingSetStream = new FileInputStream("data/train-images.idx3-ubyte");
+    FileInputStream trainingLabelsStream = new FileInputStream("data/train-labels.idx1-ubyte");
 
     trainingSetStream.skip(16);
     trainingLabelsStream.skip(8);
@@ -47,8 +50,8 @@ public class Main{
     trainingLabelsStream.close();
 
     // Load the testing set.
-    FileInputStream testingSetStream = new FileInputStream("../../../data/t10k-images.idx3-ubyte");
-    FileInputStream testingLabelsStream = new FileInputStream("../../../data/t10k-labels.idx1-ubyte");
+    FileInputStream testingSetStream = new FileInputStream("data/t10k-images.idx3-ubyte");
+    FileInputStream testingLabelsStream = new FileInputStream("data/t10k-labels.idx1-ubyte");
 
     testingSetStream.skip(16);
     testingLabelsStream.skip(8);
@@ -104,6 +107,7 @@ public class Main{
 
       System.out.println(counter + " correct answers!");
     }
+    net.saveNetwork("trained_networks/network_tr60000_e20_b1000_g025");
   }
 
 };
