@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /** \class NeuralNetwork.
@@ -148,8 +147,7 @@ public class NeuralNetwork{
    *  \throws FileNotFoundException
    *  \throws IOException
    */
-  public void saveNetwork(String path) throws FileNotFoundException,
-                                              IOException{
+  public void saveNetwork(String path) throws IOException{
     
     FileOutputStream fileOutputStream = new FileOutputStream(path);
     DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
@@ -173,8 +171,7 @@ public class NeuralNetwork{
    *  \throws FileNotFoundException
    *  \throws IOException
    */
-  public void loadNetwork(String path) throws FileNotFoundException,
-                                              IOException{
+  public void loadNetwork(String path) throws IOException{
     
     FileInputStream fileInputStream = new FileInputStream(path);
     DataInputStream dataInputStream = new DataInputStream(fileInputStream);

@@ -1,9 +1,7 @@
 package trainers;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.Arrays;
 
 /** \class MNISTTrainer class. Trains a neural network on the MNIST database
@@ -16,28 +14,24 @@ public class MNISTTrainer extends Trainer{
     super(sizesOfLayers);
   }
   
-  public void load() throws FileNotFoundException, IOException{
+  public void load() throws IOException{
     numberOfTrainingSamples_ = 60000;
     numberOfTestingSamples_ = 10000;
-    numberOfEpochs_ = 10;
-    batchSize_ = 1000;
-    gamma_ = 0.25;
-    
-    int sampleLength = sizesOfLayers_[0];
-    int numberOfLabels = sizesOfLayers_[sizesOfLayers_.length - 1];
+    sampleLength_ = sizesOfLayers_[0];
+    numberOfLabels_ = sizesOfLayers_[sizesOfLayers_.length - 1];
     
     // Load the training set. =================================================
     FileInputStream fileInputStream = new FileInputStream(
                       "data/training_data/MNIST_data/train-images.idx3-ubyte");
     fileInputStream.skip(16);
     
-    trainingSet_ = new double[numberOfTrainingSamples_][sampleLength];
-    byte[] sampleBuffer = new byte[sampleLength];
+    trainingSet_ = new double[numberOfTrainingSamples_][sampleLength_];
+    byte[] sampleBuffer = new byte[sampleLength_];
     
     for(int i = 0;i < numberOfTrainingSamples_;i++){
       fileInputStream.read(sampleBuffer);
       
-      for(int j = 0;j < sampleLength;j++){
+      for(int j = 0;j < sampleLength_;j++){
         trainingSet_[i][j] = ((double)(sampleBuffer[j] & 0xFF)) / 127.5 - 1;
       }
     }
@@ -48,13 +42,13 @@ public class MNISTTrainer extends Trainer{
                       "data/training_data/MNIST_data/train-labels.idx1-ubyte");
     fileInputStream.skip(8);
     
-    trainingLabels_ = new double[numberOfTrainingSamples_][numberOfLabels];
+    trainingLabels_ = new double[numberOfTrainingSamples_][numberOfLabels_];
     byte[] labelBuffer = new byte[1];
     
     for(int i = 0;i < numberOfTrainingSamples_;i++){
       fileInputStream.read(labelBuffer);
       
-      for(int j = 0;j < numberOfLabels;j++){
+      for(int j = 0;j < numberOfLabels_;j++){
         trainingLabels_[i][j] = 0;
       }
       
@@ -67,12 +61,12 @@ public class MNISTTrainer extends Trainer{
                         "data/testing_data/MNIST_data/t10k-images.idx3-ubyte");
     fileInputStream.skip(16);
     
-    testingSet_ = new double[numberOfTestingSamples_][sampleLength];
+    testingSet_ = new double[numberOfTestingSamples_][sampleLength_];
     
     for(int i = 0;i < numberOfTestingSamples_;i++){
       fileInputStream.read(sampleBuffer);
       
-      for(int j = 0;j < sampleLength;j++){
+      for(int j = 0;j < sampleLength_;j++){
         testingSet_[i][j] = ((double)(sampleBuffer[j] & 0xFF)) / 127.5 - 1;
       }
     }
@@ -92,8 +86,10 @@ public class MNISTTrainer extends Trainer{
     fileInputStream.close();
   }
   
-  public void train() throws FileNotFoundException, IOException{
-    int numberOfLabels = sizesOfLayers_[sizesOfLayers_.length - 1];
+  public void train() throws IOException{
+    numberOfEpochs_ = 10;
+    batchSize_ = 1000;
+    gamma_ = 0.25;
     
     for(int epoch = 0;epoch < numberOfEpochs_;epoch++){
       System.out.println("Epoch: " + epoch);
@@ -110,7 +106,7 @@ public class MNISTTrainer extends Trainer{
       
       // Test the neural network. =============================================
       int correctAnswerCounter = 0;
-      double[] output = new double[numberOfLabels];
+      double[] output = new double[numberOfLabels_];
       for(int i = 0;i < numberOfTestingSamples_;i++){
         output = neuralNetwork_.feedForward(testingSet_[i]);
         
@@ -137,4 +133,7 @@ public class MNISTTrainer extends Trainer{
 
   private int numberOfTrainingSamples_;
   private int numberOfTestingSamples_;
+  
+  private int sampleLength_;
+  private int numberOfLabels_;
 };
