@@ -1,7 +1,10 @@
-data/
-
 *.swp
-
-bin/
 .classpath
 .project
+todo
+dump
+
+data/
+bin/
+octave_dir/
+testing_dir/
