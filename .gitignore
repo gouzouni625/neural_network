@@ -1,6 +1,9 @@
 *.swp
+*.jar
+
 .classpath
 .project
+
 todo
 dump
 

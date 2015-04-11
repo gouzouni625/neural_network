@@ -17,8 +17,7 @@ import org.opencv.imgproc.Imgproc;
  *         at
  *         http://yann.lecun.com/exdb/mnist/
  *         and the GeoGebra software at
- *         https://www.geogebra.org/
- *         
+ *         https://www.geogebra.org/      
  */
 public class MixedTrainer extends Trainer{
   
@@ -221,7 +220,7 @@ public class MixedTrainer extends Trainer{
   /** \brief Training and testing data are converted so that they only have
    *         binary values(-1 or 1).
    */
-  public void prepareData(){
+  private void prepareData(){
     for(int i = 0;i < numberOfTrainingSamples_;i++){
       for(int j = 0;j < sampleLength_;j++){
         if(trainingSet_[i][j] > 0){
@@ -253,7 +252,7 @@ public class MixedTrainer extends Trainer{
    *  \param sampleColumns The number of columns of each sample if it is mapped
    *                       on a grid.
    */
-  public void distort(double[][] data, int sampleRows, int sampleColumns){
+  private void distort(double[][] data, int sampleRows, int sampleColumns){
     Random random = new Random();
     double destortionType, parameter;
     Mat trfMtx = new Mat(2, 3, CvType.CV_64F);
@@ -264,14 +263,20 @@ public class MixedTrainer extends Trainer{
 
       if(destortionType < 0.25){ // Rotating. [-pi/12, pi/12).
         parameter = ((2 * random.nextDouble() - 1) / 12) * Math.PI; // Angle.
-        trfMtx.put(0, 0, Math.cos(parameter)); trfMtx.put(0, 1, Math.sin(parameter)); trfMtx.put(0, 2, 0);
-        trfMtx.put(1, 0, -Math.sin(parameter)); trfMtx.put(1, 1, Math.cos(parameter)); trfMtx.put(1, 2, 0);
+        trfMtx.put(0, 0, Math.cos(parameter));
+        trfMtx.put(0, 1, Math.sin(parameter));
+        trfMtx.put(0, 2, 0);
+        trfMtx.put(1, 0, -Math.sin(parameter));
+        trfMtx.put(1, 1, Math.cos(parameter));
+        trfMtx.put(1, 2, 0);
       }
       else if(destortionType < 0.5){  // Scaling. [0.85, 1.15).
-        parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1; // Volume for horizontal axis.
+        // Volume for horizontal axis.
+        parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
         trfMtx.put(0, 0, parameter); trfMtx.put(0, 1, 0); trfMtx.put(0, 2, 0);
         
-        parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1; // Volume for vertical axis.
+        // Volume for vertical axis.
+        parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
         trfMtx.put(1, 0, 0); trfMtx.put(1, 1, parameter); trfMtx.put(1, 2, 0);
       }
       else if(destortionType < 0.75){  // Shearing. [-0.15, 0.15).
