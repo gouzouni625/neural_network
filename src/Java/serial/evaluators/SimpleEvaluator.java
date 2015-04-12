@@ -125,13 +125,17 @@ public class SimpleEvaluator{
                                               height - traces.get(i).get(j).y),
                          new Point(traces.get(i).get(j + 1).x,
                                           height - traces.get(i).get(j + 1).y),
-                         new Scalar(255), thickness);
+                         new Scalar(255, 255, 255), thickness);
       }
     }
 
     Imgproc.resize(image, image, new Size(1000, 1000));
     width = 1000;
     height = 1000;
+    
+    Imgproc.copyMakeBorder(image, image, height / 2, width / 2,
+                                         height / 2, width / 2,
+                                 Imgproc.BORDER_CONSTANT, new Scalar(0, 0, 0));
     
     Imgproc.blur(image, image, new Size(height / 5, width / 5));
     
