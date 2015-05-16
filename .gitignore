@@ -5,14 +5,14 @@
 .project
 
 todo
+notes
 dump
 
-data/
 bin/
 octave_dir/
 testing_dir/
 digit_recognizer/
 
-src/Java/serial/Main.java
+src/Java/serial/main/
 src/Java/serial/evaluators/DigitRecognizer.java
 src/Java/serial/evaluators/InstantDatabaseEvaluator.java
