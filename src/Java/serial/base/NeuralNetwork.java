@@ -10,7 +10,7 @@ import java.io.IOException;
  *  \brief A class implementing a neural network. Includes the network's
  *         parameters, training and evaluating methods.
  */
-public class NeuralNetwork{
+public class NeuralNetwork extends ClassifyingAlgorithm{
 
   /** \brief The constructor of the class. Randomly initializes the
    *         network's parameters with values in [-0.25, 0.25).
@@ -131,7 +131,7 @@ public class NeuralNetwork{
     }
   }
 
-  /** \brief getter function for the number of this neural network's layers.
+  /** \brief Getter function for the number of this neural network's layers.
    * 
    *  \return The number of this neural network's layers.
    */
@@ -270,9 +270,17 @@ public class NeuralNetwork{
     return (1 / (1 + Math.exp(-z)));
   }
 
+  /** \brief Getter function for the sizes of layers.
+   *
+   *  \return The sizes of layers.
+   */
+  public int[] getSizesOfLayers(){
+    return sizesOfLayers_;
+  }
+
   private int numberOfLayers_; //!< The number of layers of the neural network.
   private int[] sizesOfLayers_; //!< The number of neurons in each layer.
 
   private double[][][] weights_; //!< dimensions are: layer, neuron, weight.
   private double[][] biases_; //!< dimensions are: layer, neuron.
-};
+}
