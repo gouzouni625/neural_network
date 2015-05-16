@@ -10,7 +10,11 @@ import org.opencv.imgproc.Imgproc;
  *  \brief Class that contains methods for distorting images by applying affine
  *         transformations on them.
  */
-public class ImageDistorter{
+public class ImageDistorter extends Distorter{
+
+  public ImageDistorter(int distortFrequency){
+    super(distortFrequency);
+  }
   
   /** \brief Applies random affine transformations on a set of data. 
    * 
@@ -21,11 +25,11 @@ public class ImageDistorter{
    *                       on a grid.
    *  \return The transformed data.
    */
-  public double[][] distort(double[][] data, int sampleRows, int sampleColumns){
+  public double[][] distort(double[][] data){
     Random random = new Random();
     double destortionType, parameter;
     Mat trfMtx = new Mat(2, 3, CvType.CV_64F);
-    Mat image = new Mat(sampleRows, sampleColumns, CvType.CV_64F);
+    Mat image = new Mat(sampleRows_, sampleColumns_, CvType.CV_64F);
     
     for(int i = 0;i < data.length;i++){
       destortionType = random.nextDouble();
@@ -61,17 +65,17 @@ public class ImageDistorter{
         trfMtx.put(1, 0, 0); trfMtx.put(1, 1, 1); trfMtx.put(1, 2, parameter);
       }
       
-      for(int j = 0;j < sampleRows;j++){
-        for(int k = 0;k < sampleColumns;k++){
-          image.put(j, k, data[i][j * sampleColumns + k]);
+      for(int j = 0;j < sampleRows_;j++){
+        for(int k = 0;k < sampleColumns_;k++){
+          image.put(j, k, data[i][j * sampleColumns_ + k]);
         }
       }
       
       Imgproc.warpAffine(image, image, trfMtx, image.size());
       
-      for(int j = 0;j < sampleRows;j++){
-        for(int k = 0;k < sampleColumns;k++){
-          data[i][j * sampleColumns + k] = image.get(j, k)[0];
+      for(int j = 0;j < sampleRows_;j++){
+        for(int k = 0;k < sampleColumns_;k++){
+          data[i][j * sampleColumns_ + k] = image.get(j, k)[0];
         }
       }
       
@@ -79,4 +83,23 @@ public class ImageDistorter{
 
     return data;
   }
+
+  public void setSampleRows(int sampleRows){
+    sampleRows_ = sampleRows;
+  }
+
+  public int getSampleRows(){
+    return sampleRows_;
+  }
+
+  public void setSampleColumns(int sampleColumns){
+    sampleColumns_ = sampleColumns;
+  }
+
+  public int getSampleColumns(){
+    return sampleColumns_;
+  }
+
+  private int sampleRows_;
+  private int sampleColumns_;
 }
