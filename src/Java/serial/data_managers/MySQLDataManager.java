@@ -28,17 +28,44 @@ import com.mysql.jdbc.Statement;
  */
 public class MySQLDataManager{
   
+  public MySQLDataManager(){
+  }
+  
+  public MySQLDataManager(String database, String databaseUsername,
+                          String databasePassword, String databaseTable,
+                          String databaseTableColumn){
+    database_ = database;
+    databaseUsername_ = databaseUsername;
+    databasePassword_ = databasePassword;
+    databaseTable_ = databaseTable;
+    databaseTableColumn_ = databaseTableColumn;
+  }
+
+  public void loadData(String database, String databaseUsername,
+                       String databasePassword, String databaseTable,
+                       String databaseTableColumn)
+                       throws SQLException, UnsupportedEncodingException{
+    database_ = database;
+    databaseUsername_ = databaseUsername;
+    databasePassword_ = databasePassword;
+    databaseTable_ = databaseTable;
+    databaseTableColumn_ = databaseTableColumn;
+
+    loadData();
+  }
+
   public void loadData() throws SQLException, UnsupportedEncodingException{
     databaseData_ = new ArrayList<ArrayList<ArrayList<Point> > >();
 
     // Connect to the database and get the data. ==============================
     Connection connection = (Connection) DriverManager.getConnection(
-              "jdbc:mysql://localhost/handwritten_equations_db", "george", "");
+              database_, databaseUsername_, databasePassword_);
     
     // Process the data. ======================================================
     Statement statement = (Statement) connection.createStatement();
     ResultSet resultSet = statement.executeQuery(
-                                       "SELECT trace_groups FROM inkml_files");
+                                       "SELECT " + databaseTableColumn_ +
+                                       " FROM " + databaseTable_);
       
     while(resultSet.next()){
       ArrayList<ArrayList<Point> > traces = new ArrayList<ArrayList<Point> >();
@@ -125,11 +152,11 @@ public class MySQLDataManager{
     for(int i = 0;i < databaseData_.size();i++){
       width_[i] = maxXs[i] - minXs[i];
       if(width_[i] == 0){
-        width_[i] = 100;
+        width_[i] = 10;
       }
       height_[i] = maxYs[i] - minYs[i];
       if(height_[i] == 0){
-        height_[i] = 100;
+        height_[i] = 10;
       }
     }
 
@@ -145,7 +172,12 @@ public class MySQLDataManager{
     
   }
   
-  public void saveData() throws IOException{
+  public void saveData(int[] dataLabels, String dataPath) throws IOException{
+    saveData(dataLabels, dataPath, false, "");
+  }
+  
+  public void saveData(int[] dataLabels, String dataPath, boolean saveImages,
+                                         String imagesPath) throws IOException{
     
     // Convert data to images. ================================================
     Mat[] images = new Mat[databaseData_.size()];
@@ -205,16 +237,17 @@ public class MySQLDataManager{
           }
         }
       }
-      // Uncomment this to save the images in separate files.
-      //Highgui.imwrite("data/my_images/image" + i + ".tiff", images[i]);
+
+      if(saveImages){
+        Highgui.imwrite(imagesPath + "/image" + i + ".tiff", images[i]);
+      }
     }
 
     // Save image in binary format. ===========================================
     FileOutputStream fileOutputStream = null;
     DataOutputStream dataOutputStream = null;
 
-    fileOutputStream = new FileOutputStream(
-                           "data/training_data/my_data/database_training_set");
+    fileOutputStream = new FileOutputStream(dataPath + "/data");
     dataOutputStream = new DataOutputStream(fileOutputStream);
       
     dataOutputStream.writeInt(images.length);
@@ -229,48 +262,23 @@ public class MySQLDataManager{
     dataOutputStream.close();
    
     // Save labels in binary format. ==========================================
-    fileOutputStream = new FileOutputStream(
-                        "data/training_data/my_data/database_training_labels");
+    fileOutputStream = new FileOutputStream(dataPath + "/labels");
     dataOutputStream = new DataOutputStream(fileOutputStream);
       
-    dataOutputStream.writeInt(DATABASE_LABELS.length);
-    for(int i = 0;i < DATABASE_LABELS.length;i++){
-      dataOutputStream.writeInt(DATABASE_LABELS[i]);
+    dataOutputStream.writeInt(dataLabels.length);
+    for(int i = 0;i < dataLabels.length;i++){
+      dataOutputStream.writeInt(dataLabels[i]);
     }
     dataOutputStream.close();
   }
   
+  private String database_;
+  private String databaseUsername_;
+  private String databasePassword_;
+  private String databaseTable_;
+  private String databaseTableColumn_;
+  
   private ArrayList<ArrayList<ArrayList<Point> > > databaseData_;
   int[] width_;
   int[] height_;
-  private final int[] DATABASE_LABELS = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                         2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                                         3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-                                         4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-                                         5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-                                         6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-                                         7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-                                         8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-                                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
-                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                         2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                                         3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-                                         4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-                                         5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-                                         6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-                                         7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-                                         8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-                                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
-                                         0, 0, 0, 0, 0, 0,
-                                         1, 1, 1, 1, 1,
-                                         2, 2, 2, 2, 2, 2,
-                                         3, 3, 3, 3, 3,
-                                         4, 4, 4, 4, 4, 4,
-                                         5, 5, 5, 5, 5, 5,
-                                         6, 6, 6, 6, 6, 6,
-                                         7, 7, 7, 7, 7,
-                                         8, 8, 8, 8, 8,
-                                         9, 9, 9, 9, 9};
 };
