@@ -1,7 +1,9 @@
-package evaluators;
+package main.evaluators;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import main.base.NeuralNetwork;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -10,8 +12,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-
-import base.NeuralNetwork;
 
 public class SimpleEvaluator{
   

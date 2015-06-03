@@ -1,12 +1,12 @@
-package trainers;
+package main.trainers;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.util.Arrays;
 
-import org.opencv.core.Core;
+import main.distorters.Distorter;
 
-import distorters.Distorter;
+import org.opencv.core.Core;
 
 public class SimpleTrainer extends Trainer{
 

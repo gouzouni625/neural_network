@@ -1,10 +1,12 @@
-package base;
+package main.base;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import main.utilities.DataSample;
 
 /** \class NeuralNetwork.
  *  \brief A class implementing a neural network. Includes the network's
@@ -82,9 +84,7 @@ public class NeuralNetwork{
    *  \param numberOfIterations The number of iterations of the training method.
    *  \param gamma Parameter gamma of the training method(gradient descent).
    */
-  public void train(double[][] trainingSet, double[][] labels,
-                    int trainingSetSize, int numberOfIterations,
-                    double gamma){
+  public void train(double[][] trainingSet, double[][] labels, int trainingSetSize, int numberOfIterations, double gamma){
 
     double[][][] nablaTheta = new double[numberOfLayers_ - 1][][];
     for(int i = 0;i < numberOfLayers_ - 1;i++){
@@ -196,8 +196,7 @@ public class NeuralNetwork{
    *  \param nablaTheta The array in which the derivative of the cost function
    *         will be saved.
    */
-  private void backPropagation(double[] sample, double[] label,
-                               double[][][] nablaTheta){
+  private void backPropagation(double[] sample, double[] label, double[][][] nablaTheta){
 
     // Calculating the output of each neuron.
     double[] sampleBuffer = sample.clone();

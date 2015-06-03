@@ -1,9 +1,9 @@
-package trainers;
+package main.trainers;
 
 import java.io.IOException;
 
-import base.NeuralNetwork;
-import distorters.Distorter;
+import main.base.NeuralNetwork;
+import main.distorters.Distorter;
 
 /** \class Abstract class Trainer.
  *  \brief Implements a neural network trainer.

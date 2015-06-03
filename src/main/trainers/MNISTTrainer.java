@@ -1,4 +1,4 @@
-package trainers;
+package main.trainers;
 
 import java.io.FileInputStream;
 import java.io.IOException;

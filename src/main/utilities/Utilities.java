@@ -1,7 +1,12 @@
-package utilities;
+package main.utilities;
 
 public class Utilities{
-  
+
+  public static final int UNKNOWN_LABEL = -1;
+
+  public static final int DATA_MAGIC_NUMBER = 2051;
+  public static final int LABELS_MAGIC_NUMBER = 2049;
+
   public enum Digits{
     ZERO("0"),
     ONE("1"),
@@ -13,14 +18,14 @@ public class Utilities{
     SEVEN("7"),
     EIGHT("8"),
     NINE("9");
-    
+
     Digits(String symbol){
       symbol_ = symbol;
     }
-    
+
     private String symbol_;
   }
-  
+
   public enum Operators{
     PLUS("+"),
     MINUS("-"),
@@ -29,37 +34,37 @@ public class Utilities{
     // HAT("^"), // The ^ symbol appears above the symbol in TeX format.
     SQRT("\\sqrt{}"), // The known square root symbol in TeX format.
     EQUALS("=");
-    
+
     Operators(String symbol){
       symbol_ = symbol;
     }
-    
+
     private String symbol_;
   }
-  
+
   public enum Separators{
     LEFT_PARENTHESIS("("),
     RIGHT_PARENTHESIS(")"),
     COMMA(",");
-    
+
     Separators(String symbol){
       symbol_ = symbol;
     }
-    
+
     private String symbol_;
   }
-  
+
   public enum Variables{
     X("x"),
     Y("y");
-    
+
     Variables(String symbol){
       symbol_ = symbol;
     }
-    
+
     private String symbol_;
   }
-  
+
   public enum UpperCaseLetters{
     A("A"), B("B"), C("C"), D("D"), E("E"),
     F("F"), G("G"), H("H"), I("I"), J("J"),
@@ -67,14 +72,14 @@ public class Utilities{
     P("P"), Q("Q"), R("R"), S("S"), T("T"),
     U("U"), V("V"), W("W"), X("X"), Y("Y"),
     Z("Z");
-    
+
     UpperCaseLetters(String symbol){
       symbol_ = symbol;
     }
-    
+
     private String symbol_;
   }
-  
+
   // functions: sin, cos, tan, exp, ln.
   public enum LowerCaseLetters{
     A("a"), /*B("b"),*/ C("c"), /*D("d"),*/ E("e"),
@@ -83,14 +88,14 @@ public class Utilities{
     P("p"), /*Q("q"),*/ /*R("r"),*/ S("s"), T("t"),
     /*U("u"),*/ /*V("v"),*/ /*W("w"),*/ X("x"), /*Y("y"),*/
     /*Z("z")*/;
-    
+
     LowerCaseLetters(String symbol){
       symbol_ = symbol;
     }
-    
+
     private String symbol_;
   }
-  
+
   public static final String[] ALL_SYMBOLS = {Digits.ZERO.name(),
                                               Digits.ONE.name(),
                                               Digits.TWO.name(),
@@ -106,7 +111,7 @@ public class Utilities{
                                               Operators.EQUALS.name(),
                                               Variables.X.name(),
                                               Variables.Y.name()};
-  
+
   // TODO
   // Notice that Variables.X.name() is equal to UpperCaseLetters.X.name().
   // This means that the one that appears second in the following if

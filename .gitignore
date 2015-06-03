@@ -12,7 +12,8 @@ bin/
 octave_dir/
 testing_dir/
 digit_recognizer/
+data
 
-src/Java/serial/main/
-src/Java/serial/evaluators/DigitRecognizer.java
-src/Java/serial/evaluators/InstantDatabaseEvaluator.java
+src/executables/
+src/main/evaluators/DigitRecognizer.java
+src/main/evaluators/InstantDatabaseEvaluator.java
