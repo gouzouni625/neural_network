@@ -10,11 +10,11 @@ import java.io.IOException;
  *  \brief A class implementing a neural network. Includes the network's
  *         parameters, training and evaluating methods.
  */
-public class NeuralNetwork extends ClassifyingAlgorithm{
+public class NeuralNetwork{
 
   /** \brief The constructor of the class. Randomly initializes the
    *         network's parameters with values in [-0.25, 0.25).
-   * 
+   *
    *  \param sizesOfLayers The number of neurons in each layer including
    *         the input and output layers. The number of layers is equal
    *         to sizesOfLayers.length.
@@ -42,7 +42,7 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
   }
 
   /** \brief Applies an input to the neural network and returns its output.
-   * 
+   *
    *  \param input The input to the neural network. The length of the input
    *         must be equal to sizesOfLayers_[0].
    *  \return The output of the layer for the given input. The length of the
@@ -71,7 +71,7 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
   }
 
   /** \brief Trains the neural network on a given set of data.
-   * 
+   *
    *  \param trainingSet The set of data on which the neural network will
    *         be trained. The length of each sample of the data set must be
    *         equal to sizesOfLayers_[0].
@@ -79,16 +79,16 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
    *         sample of the labels set must be equal to
    *         sizesOfLayers_[sizesOfLayers_.length - 1].
    *  \param trainingSetSize The number of training samples in the training set.
-   *  \param numberOfIterations The number of iterations of the training method. 
+   *  \param numberOfIterations The number of iterations of the training method.
    *  \param gamma Parameter gamma of the training method(gradient descent).
    */
   public void train(double[][] trainingSet, double[][] labels,
                     int trainingSetSize, int numberOfIterations,
                     double gamma){
-    
+
     double[][][] nablaTheta = new double[numberOfLayers_ - 1][][];
     for(int i = 0;i < numberOfLayers_ - 1;i++){
-      
+
       nablaTheta[i] = new double[sizesOfLayers_[i + 1]][];
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
         nablaTheta[i][j] = new double[sizesOfLayers_[i] + 1];
@@ -132,7 +132,7 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
   }
 
   /** \brief Getter function for the number of this neural network's layers.
-   * 
+   *
    *  \return The number of this neural network's layers.
    */
   public int getNumberOfLayers(){
@@ -140,46 +140,46 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
   }
 
   /** \brief Saves the parameters of the neural network to a binary file.
-   * 
+   *
    *  \param path The absolute, or relative path of the file where the
    *         parameters will be saved.
-   *         
+   *
    *  \throws FileNotFoundException
    *  \throws IOException
    */
   public void saveNetwork(String path) throws IOException{
-    
+
     FileOutputStream fileOutputStream = new FileOutputStream(path);
     DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
-  
+
     for(int i = 0;i < numberOfLayers_ - 1;i++){
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
         dataOutputStream.writeDouble(biases_[i][j]);
-          
+
         for(int k = 0;k < sizesOfLayers_[i];k++){
           dataOutputStream.writeDouble(weights_[i][j][k]);
         }
       }
     }
-    dataOutputStream.close();        
+    dataOutputStream.close();
   }
 
   /** \brief Load the parameters of a neural network to this neural network.
-   * 
-   *  \param path The path of the file where the parameters are saved. 
-   *  
+   *
+   *  \param path The path of the file where the parameters are saved.
+   *
    *  \throws FileNotFoundException
    *  \throws IOException
    */
   public void loadNetwork(String path) throws IOException{
-    
+
     FileInputStream fileInputStream = new FileInputStream(path);
     DataInputStream dataInputStream = new DataInputStream(fileInputStream);
-      
+
     for(int i = 0;i < numberOfLayers_ - 1;i++){
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
         biases_[i][j] = dataInputStream.readDouble();
-          
+
         for(int k = 0;k < sizesOfLayers_[i];k++){
           weights_[i][j][k] = dataInputStream.readDouble();
         }
@@ -190,7 +190,7 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
 
   /** \brief Implement the back propagation algorithm to calculate the
    *         derivative of the cost function with respect to each parameter.
-   * 
+   *
    *  \param sample The input to the neural network.
    *  \param label The label of the input.
    *  \param nablaTheta The array in which the derivative of the cost function
@@ -198,7 +198,7 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
    */
   private void backPropagation(double[] sample, double[] label,
                                double[][][] nablaTheta){
-    
+
     // Calculating the output of each neuron.
     double[] sampleBuffer = sample.clone();
     double[][] activations = new double[numberOfLayers_ - 1][];
@@ -262,7 +262,7 @@ public class NeuralNetwork extends ClassifyingAlgorithm{
   }
 
   /** \brief Activation function for the neurons.
-   * 
+   *
    *  \param z The independent variable.
    *  \return The sigmoid of z.
    */
