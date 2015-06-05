@@ -22,8 +22,8 @@ import main.utilities.DataSample;
 import main.utilities.Utilities;
 
 /** \class MySQLDataManager class. Connects to a MySQL database, retrieves
- *         data saved in inkML format, creates 28x28 pixels images and saves
- *         the data to binary files.
+ *         data saved in inkML format, creates images of any size and saves
+ *         the data to IDX formatted files.
  */
 public class MySQLDataManager{
 
@@ -85,7 +85,7 @@ public class MySQLDataManager{
     connection.close();
   }
 
-  public void saveData(Size imageSize, String dataFile, int[] labels, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
+  public void saveData(Size imageSize, String dataFile, byte[] labels, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
     Mat[] images = new Mat[databaseData_.size()];
     DataSet dataSet = new DataSet();
 
@@ -99,7 +99,7 @@ public class MySQLDataManager{
       }
     }
 
-    dataSet.saveMNISTLike(dataFile, labelsFile);
+    dataSet.saveIDXFormat(dataFile, labelsFile);
   }
 
   private String database_;
