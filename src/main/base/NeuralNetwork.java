@@ -41,6 +41,8 @@ public class NeuralNetwork{
         biases_[i][j] = ((double)Math.random()) * 0.5 - 0.25;
       }
     }
+
+    momentumCoefficient_ = 0;
   }
 
   /** \brief Applies an input to the neural network and returns its output.
@@ -87,14 +89,18 @@ public class NeuralNetwork{
   public void train(double[][] trainingSet, double[][] labels, int trainingSetSize, int numberOfIterations, double gamma){
 
     double[][][] nablaTheta = new double[numberOfLayers_ - 1][][];
+    momentum_ = new double[numberOfLayers_ - 1][][];
     for(int i = 0;i < numberOfLayers_ - 1;i++){
 
       nablaTheta[i] = new double[sizesOfLayers_[i + 1]][];
+      momentum_[i] = new double[sizesOfLayers_[i + 1]][];;
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
         nablaTheta[i][j] = new double[sizesOfLayers_[i] + 1];
+        momentum_[i][j] = new double[sizesOfLayers_[i] + 1];
 
         for(int k = 0;k < sizesOfLayers_[i] + 1;k++){
           nablaTheta[i][j][k] = 0;
+          momentum_[i][j][k] = 0;
         }
       }
     }
@@ -111,10 +117,9 @@ public class NeuralNetwork{
       // Updating network's parameters using the gradient descent algorithm.
       for(int i = 0;i < numberOfLayers_ - 1;i++){
         for(int j = 0;j < sizesOfLayers_[i + 1];j++){
-          biases_[i][j] -= gamma * nablaTheta[i][j][0] / trainingSetSize;
+          biases_[i][j] -= gamma * (nablaTheta[i][j][0] * (1 - momentumCoefficient_) + momentum_[i][j][0] * momentumCoefficient_)  / trainingSetSize;
           for(int k = 0;k < sizesOfLayers_[i];k++){
-            weights_[i][j][k] -= gamma * nablaTheta[i][j][k + 1] /
-                                 trainingSetSize;
+            weights_[i][j][k] -= gamma * (nablaTheta[i][j][k + 1] * (1 - momentumCoefficient_) + momentum_[i][j][k + 1] * momentumCoefficient_)  / trainingSetSize;
           }
         }
       }
@@ -123,6 +128,7 @@ public class NeuralNetwork{
       for(int i = 0;i < numberOfLayers_ - 1;i++){
         for(int j = 0;j < sizesOfLayers_[i + 1];j++){
           for(int k = 0;k < sizesOfLayers_[i] + 1;k++){
+            momentum_[i][j][k] = nablaTheta[i][j][k];
             nablaTheta[i][j][k] = 0;
           }
         }
@@ -277,9 +283,20 @@ public class NeuralNetwork{
     return sizesOfLayers_;
   }
 
+  public void setMomentumCoefficient(double momentumCoefficient){
+    momentumCoefficient_ = momentumCoefficient;
+  }
+
+  public double getMomentumCoefficient(){
+    return momentumCoefficient_;
+  }
+
   private int numberOfLayers_; //!< The number of layers of the neural network.
   private int[] sizesOfLayers_; //!< The number of neurons in each layer.
 
   private double[][][] weights_; //!< dimensions are: layer, neuron, weight.
   private double[][] biases_; //!< dimensions are: layer, neuron.
+
+  private double[][][] momentum_;
+  private double momentumCoefficient_;
 }
