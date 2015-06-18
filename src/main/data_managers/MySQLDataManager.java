@@ -14,12 +14,12 @@ import org.opencv.highgui.Highgui;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
-import main.utilities.Point;
-import main.utilities.TraceGroup;
-import main.utilities.Trace;
-import main.utilities.DataSet;
-import main.utilities.DataSample;
 import main.utilities.Utilities;
+import main.utilities.data.DataSample;
+import main.utilities.data.DataSet;
+import main.utilities.traces.Point;
+import main.utilities.traces.Trace;
+import main.utilities.traces.TraceGroup;
 
 /** \class MySQLDataManager class. Connects to a MySQL database, retrieves
  *         data saved in inkML format, creates images of any size and saves

@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import main.utilities.DataSample;
+import main.utilities.data.DataSample;
 
 /** \class NeuralNetwork.
  *  \brief A class implementing a neural network. Includes the network's
