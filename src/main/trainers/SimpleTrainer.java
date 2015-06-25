@@ -1,7 +1,5 @@
 package main.trainers;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.util.Arrays;
 
 import main.distorters.Distorter;
