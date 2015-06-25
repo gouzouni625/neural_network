@@ -2,7 +2,7 @@ package main.distorters;
 
 public abstract class Distorter{
   public Distorter(){
-    distortFrequency_ = 1;
+    distortFrequency_ = -1;
   }
 
   public Distorter(int distortFrequency){

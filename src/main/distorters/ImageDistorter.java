@@ -12,12 +12,16 @@ import org.opencv.imgproc.Imgproc;
  */
 public class ImageDistorter extends Distorter{
 
+  public ImageDistorter(){
+    super();
+  }
+
   public ImageDistorter(int distortFrequency){
     super(distortFrequency);
   }
-  
-  /** \brief Applies random affine transformations on a set of data. 
-   * 
+
+  /** \brief Applies random affine transformations on a set of data.
+   *
    *  \param data The set of data on which to apply the transformations.
    *  \param sampleRows The number of rows of each sample if it is mapped on
    *                    a grid.
@@ -30,7 +34,7 @@ public class ImageDistorter extends Distorter{
     double destortionType, parameter;
     Mat trfMtx = new Mat(2, 3, CvType.CV_64F);
     Mat image = new Mat(sampleRows_, sampleColumns_, CvType.CV_64F);
-    
+
     for(int i = 0;i < data.length;i++){
       destortionType = random.nextDouble();
 
@@ -47,7 +51,7 @@ public class ImageDistorter extends Distorter{
         // Volume for horizontal axis.
         parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
         trfMtx.put(0, 0, parameter); trfMtx.put(0, 1, 0); trfMtx.put(0, 2, 0);
-        
+
         // Volume for vertical axis.
         parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
         trfMtx.put(1, 0, 0); trfMtx.put(1, 1, parameter); trfMtx.put(1, 2, 0);
@@ -60,25 +64,25 @@ public class ImageDistorter extends Distorter{
       else{ // translating [-5, 5).
         parameter = (2 * random.nextDouble() - 1) * 5;
         trfMtx.put(0, 0, 1); trfMtx.put(0, 1, 0); trfMtx.put(0, 2, parameter);
-        
+
         parameter = (2 * random.nextDouble() - 1) * 5;
         trfMtx.put(1, 0, 0); trfMtx.put(1, 1, 1); trfMtx.put(1, 2, parameter);
       }
-      
+
       for(int j = 0;j < sampleRows_;j++){
         for(int k = 0;k < sampleColumns_;k++){
           image.put(j, k, data[i][j * sampleColumns_ + k]);
         }
       }
-      
+
       Imgproc.warpAffine(image, image, trfMtx, image.size());
-      
+
       for(int j = 0;j < sampleRows_;j++){
         for(int k = 0;k < sampleColumns_;k++){
           data[i][j * sampleColumns_ + k] = image.get(j, k)[0];
         }
       }
-      
+
     }
 
     return data;
