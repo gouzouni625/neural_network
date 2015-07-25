@@ -38,17 +38,17 @@ public class MySQLDataManager{
     databaseTableColumn_ = databaseTableColumn;
   }
 
-  public void loadData(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableColumn) throws SQLException, UnsupportedEncodingException{
+  public void loadFromDatabase(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableColumn) throws SQLException, UnsupportedEncodingException{
     database_ = database;
     databaseUsername_ = databaseUsername;
     databasePassword_ = databasePassword;
     databaseTable_ = databaseTable;
     databaseTableColumn_ = databaseTableColumn;
 
-    loadData();
+    loadFromDatabase();
   }
 
-  public void loadData() throws SQLException, UnsupportedEncodingException{
+  public void loadFromDatabase() throws SQLException, UnsupportedEncodingException{
     databaseData_ = new ArrayList<TraceGroup>();
 
     // Connect to the database and get the data. ==============================
@@ -85,7 +85,25 @@ public class MySQLDataManager{
     connection.close();
   }
 
-  public void saveData(Size imageSize, String dataFile, byte[] labels, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
+  public void saveToDatabase(String[] data) throws SQLException{
+    Connection connection = (Connection) DriverManager.getConnection(database_, databaseUsername_, databasePassword_);
+    Statement statement = (Statement) connection.createStatement();
+
+    String values = new String("");
+    for(String value : data){
+      values += value + ", ";
+    }
+    // Remove last comma from values.
+    values = values.substring(0, values.length() - 2);
+
+    String query = "INSERT INTO " + databaseTable_ + " VALUES (" + values + ")";
+    System.out.println(query);
+    statement.executeUpdate(query);
+
+    connection.close();
+  }
+
+  public void saveToIDX(Size imageSize, String dataFile, byte[] labels, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
     Mat[] images = new Mat[databaseData_.size()];
     DataSet dataSet = new DataSet();
 
