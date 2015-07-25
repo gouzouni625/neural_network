@@ -30,20 +30,22 @@ public class MySQLDataManager{
   public MySQLDataManager(){
   }
 
-  public MySQLDataManager(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableColumn){
+  public MySQLDataManager(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableDataColumn, String databaseTableLabelsColumn){
     database_ = database;
     databaseUsername_ = databaseUsername;
     databasePassword_ = databasePassword;
     databaseTable_ = databaseTable;
-    databaseTableColumn_ = databaseTableColumn;
+    databaseTableDataColumn_ = databaseTableDataColumn;
+    databaseTableLabelsColumn_ = databaseTableLabelsColumn;
   }
 
-  public void loadFromDatabase(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableColumn) throws SQLException, UnsupportedEncodingException{
+  public void loadFromDatabase(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableDataColumn, String databaseTableLabelsColumn) throws SQLException, UnsupportedEncodingException{
     database_ = database;
     databaseUsername_ = databaseUsername;
     databasePassword_ = databasePassword;
     databaseTable_ = databaseTable;
-    databaseTableColumn_ = databaseTableColumn;
+    databaseTableDataColumn_ = databaseTableDataColumn;
+    databaseTableLabelsColumn_ = databaseTableLabelsColumn;
 
     loadFromDatabase();
   }
@@ -54,7 +56,7 @@ public class MySQLDataManager{
     // Connect to the database and get the data. ==============================
     Connection connection = (Connection) DriverManager.getConnection(database_, databaseUsername_, databasePassword_);
     Statement statement = (Statement) connection.createStatement();
-    ResultSet resultSet = statement.executeQuery("SELECT " + databaseTableColumn_ + " FROM " + databaseTable_);
+    ResultSet resultSet = statement.executeQuery("SELECT " + databaseTableDataColumn_ + " FROM " + databaseTable_ + " WHERE (label >= 0 AND label <= 17)");
 
     // Process the data. ======================================================
     while(resultSet.next()){
@@ -82,6 +84,17 @@ public class MySQLDataManager{
       databaseData_.add(traceGroup);
     }
 
+    // Retrieve labels.
+    if(databaseTableLabelsColumn_ != null){
+      labels_ = new ArrayList<Byte>();
+
+      resultSet = statement.executeQuery("SELECT " + databaseTableLabelsColumn_ + " FROM " + databaseTable_ + " WHERE (label >= 0 AND label <= 17)");
+
+      while(resultSet.next()){
+        labels_.add(Byte.parseByte(resultSet.getString(1)));
+      }
+    }
+
     connection.close();
   }
 
@@ -101,6 +114,15 @@ public class MySQLDataManager{
     statement.executeUpdate(query);
 
     connection.close();
+  }
+
+  public void saveToIDX(Size imageSize, String dataFile, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
+    byte[] labels = new byte[labels_.size()];
+    for(int i = 0;i < labels_.size();i++){
+      labels[i] = labels_.get(i);
+    }
+
+    this.saveToIDX(imageSize, dataFile, labels, labelsFile, saveImages, imagesPath);
   }
 
   public void saveToIDX(Size imageSize, String dataFile, byte[] labels, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
@@ -124,8 +146,10 @@ public class MySQLDataManager{
   private String databaseUsername_;
   private String databasePassword_;
   private String databaseTable_;
-  private String databaseTableColumn_;
+  private String databaseTableDataColumn_;
+  private String databaseTableLabelsColumn_;
 
   private ArrayList<TraceGroup> databaseData_;
+  private ArrayList<Byte> labels_;
 
 }
