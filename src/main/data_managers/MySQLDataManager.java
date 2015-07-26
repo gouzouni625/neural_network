@@ -56,7 +56,7 @@ public class MySQLDataManager{
     // Connect to the database and get the data. ==============================
     Connection connection = (Connection) DriverManager.getConnection(database_, databaseUsername_, databasePassword_);
     Statement statement = (Statement) connection.createStatement();
-    ResultSet resultSet = statement.executeQuery("SELECT " + databaseTableDataColumn_ + " FROM " + databaseTable_ + " WHERE (label >= 0 AND label <= 17)");
+    ResultSet resultSet = statement.executeQuery("SELECT " + databaseTableDataColumn_ + " FROM " + databaseTable_);
 
     // Process the data. ======================================================
     while(resultSet.next()){
@@ -88,7 +88,7 @@ public class MySQLDataManager{
     if(databaseTableLabelsColumn_ != null){
       labels_ = new ArrayList<Byte>();
 
-      resultSet = statement.executeQuery("SELECT " + databaseTableLabelsColumn_ + " FROM " + databaseTable_ + " WHERE (label >= 0 AND label <= 17)");
+      resultSet = statement.executeQuery("SELECT " + databaseTableLabelsColumn_ + " FROM " + databaseTable_);
 
       while(resultSet.next()){
         labels_.add(Byte.parseByte(resultSet.getString(1)));
