@@ -21,10 +21,7 @@ public class SimpleTrainer extends Trainer{
   }
 
   @Override
-  public void load() throws Exception{
-    DataSet trainingSet = DataSet.loadIDXFormat(trainingSetPath_, trainingLabelsPath_);
-    DataSet testingSet = DataSet.loadIDXFormat(testingSetPath_, testingLabelsPath_);
-
+  public void load(DataSet trainingSet, DataSet testingSet) throws Exception{
     trainingSet_ = new double[trainingSet.size()][sampleLength_];
     trainingLabels_ = new double[trainingSet.size()][numberOfLabels_];
     for(int i = 0;i < trainingSet.size();i++){
@@ -53,8 +50,7 @@ public class SimpleTrainer extends Trainer{
 
   @Override
   public void train() throws Exception{
-    double[][] trainingSetBuffer = new double[numberOfTrainingSamples_]
-                                             [sampleLength_];
+    double[][] trainingSetBuffer = new double[numberOfTrainingSamples_][sampleLength_];
 
     double bestAccuracy = 0;
     for(int epoch = 0;epoch < numberOfEpochs_;epoch++){
@@ -98,7 +94,7 @@ public class SimpleTrainer extends Trainer{
                                  batch * batchSize_, numberOfTrainingSamples_),
                              Arrays.copyOfRange(trainingLabels_,
                                  batch * batchSize_, numberOfTrainingSamples_),
-                            batchSize_, 1, gamma_);
+                             batchSize_, 1, gamma_);
       }
 
       // Test the result on each epoch.

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import main.base.NeuralNetwork;
 import main.distorters.Distorter;
+import main.utilities.data.DataSet;
 
 /** \class Abstract class Trainer.
  *  \brief Implements a neural network trainer.
@@ -64,7 +65,7 @@ public abstract class Trainer{
    *                    this class, to load data from files using
    *                    file input streams.
    */
-  abstract public void load() throws Exception;
+  abstract public void load(DataSet trainingSet, DataSet testingSet) throws Exception;
 
   /** \brief Abstract method for training the neural network on the data.
    *
