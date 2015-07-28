@@ -20,6 +20,12 @@ public class SimpleTrainer extends Trainer{
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   }
 
+  public SimpleTrainer(int[] sizesOfLayers, Distorter distorter){
+    super(sizesOfLayers, "", "", "", "", distorter);
+
+    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+  }
+
   @Override
   public void load(DataSet trainingSet, DataSet testingSet) throws Exception{
     trainingSet_ = new double[trainingSet.size()][sampleLength_];
