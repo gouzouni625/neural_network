@@ -142,6 +142,14 @@ public class MySQLDataManager{
     dataSet.saveIDXFormat(dataFile, labelsFile);
   }
 
+  public ArrayList<TraceGroup> getDatabaseData(){
+    return databaseData_;
+  }
+
+  public ArrayList<Byte> getLabels(){
+    return labels_;
+  }
+
   private String database_;
   private String databaseUsername_;
   private String databasePassword_;
