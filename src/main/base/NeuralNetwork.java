@@ -117,9 +117,11 @@ public class NeuralNetwork{
       // Updating network's parameters using the gradient descent algorithm.
       for(int i = 0;i < numberOfLayers_ - 1;i++){
         for(int j = 0;j < sizesOfLayers_[i + 1];j++){
-          biases_[i][j] -= gamma * (nablaTheta[i][j][0] * (1 - momentumCoefficient_) + momentum_[i][j][0] * momentumCoefficient_)  / trainingSetSize;
+          momentum_[i][j][0] = (nablaTheta[i][j][0] * (1 - momentumCoefficient_) + momentum_[i][j][0] * momentumCoefficient_)  / trainingSetSize;
+          biases_[i][j] -= gamma * momentum_[i][j][0];
           for(int k = 0;k < sizesOfLayers_[i];k++){
-            weights_[i][j][k] -= gamma * (nablaTheta[i][j][k + 1] * (1 - momentumCoefficient_) + momentum_[i][j][k + 1] * momentumCoefficient_)  / trainingSetSize;
+            momentum_[i][j][k + 1] = (nablaTheta[i][j][k + 1] * (1 - momentumCoefficient_) + momentum_[i][j][k + 1] * momentumCoefficient_)  / trainingSetSize;
+            weights_[i][j][k] -= gamma * momentum_[i][j][k + 1];
           }
         }
       }
@@ -128,7 +130,7 @@ public class NeuralNetwork{
       for(int i = 0;i < numberOfLayers_ - 1;i++){
         for(int j = 0;j < sizesOfLayers_[i + 1];j++){
           for(int k = 0;k < sizesOfLayers_[i] + 1;k++){
-            momentum_[i][j][k] = nablaTheta[i][j][k];
+            //momentum_[i][j][k] = nablaTheta[i][j][k];
             nablaTheta[i][j][k] = 0;
           }
         }
