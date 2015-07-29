@@ -232,7 +232,7 @@ public class NeuralNetwork{
     double[][] delta = new double[numberOfLayers_ - 1][];
     delta[numberOfLayers_ - 2] = new double[sizesOfLayers_[numberOfLayers_ - 1]];
     for(int j = 0;j < sizesOfLayers_[numberOfLayers_ - 1];j++){
-      delta[numberOfLayers_ - 2][j] = activations[numberOfLayers_ - 2][j] - label[j];
+      delta[numberOfLayers_ - 2][j] = costFunction(activations[numberOfLayers_ - 2][j], label[j]);
     }
     for(int i = numberOfLayers_ - 3;i >= 0;i--){
 
@@ -266,6 +266,10 @@ public class NeuralNetwork{
       }
     }
 
+  }
+
+  private double costFunction(double activation, double label){
+    return (label * Math.log(activation) + (1 - label) * Math.log(1 - activation));
   }
 
   /** \brief Activation function for the neurons.
