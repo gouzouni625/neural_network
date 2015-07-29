@@ -63,7 +63,7 @@ public class NeuralNetwork{
           sum += weights_[i][j][k] * inputBuffer[k];
         }
 
-        output[j] = this.sigmoid(sum + biases_[i][j]);
+        output[j] = this.activationFunction(sum + biases_[i][j]);
       }
 
       if(i + 2 < numberOfLayers_){
@@ -219,7 +219,7 @@ public class NeuralNetwork{
           sum += weights_[i][j][k] * sampleBuffer[k];
         }
 
-        activations[i][j] = this.sigmoid(sum + biases_[i][j]);
+        activations[i][j] = this.activationFunction(sum + biases_[i][j]);
       }
 
       if(i + 2 < numberOfLayers_){
@@ -277,6 +277,10 @@ public class NeuralNetwork{
    *  \param z The independent variable.
    *  \return The sigmoid of z.
    */
+  private double activationFunction(double z){
+    return (sigmoid(z));
+  }
+
   private double sigmoid(double z){
     return (1 / (1 + Math.exp(-z)));
   }
