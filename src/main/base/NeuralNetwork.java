@@ -269,7 +269,7 @@ public class NeuralNetwork{
   }
 
   private double costFunction(double activation, double label){
-    return (label * Math.log(activation) + (1 - label) * Math.log(1 - activation));
+    return (activation - label);
   }
 
   /** \brief Activation function for the neurons.
