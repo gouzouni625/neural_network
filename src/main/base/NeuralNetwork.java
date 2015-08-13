@@ -13,7 +13,6 @@ import java.io.IOException;
  *  The implementation includes the NeuralNetwork parameters, training and evaluating methods.
  */
 public class NeuralNetwork{
-
   /**
    *  @brief Constructor
    *
@@ -185,7 +184,6 @@ public class NeuralNetwork{
    *  @throws IOException When an exception occurs while reading from the file.
    */
   public void loadNetwork(String path) throws IOException{
-
     FileInputStream fileInputStream = new FileInputStream(path);
     DataInputStream dataInputStream = new DataInputStream(fileInputStream);
 

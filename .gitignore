@@ -10,15 +10,11 @@ doxygen/html
 doxygen/latex
 
 # Other
+testing_dir/
 src/executables/
-src/main/evaluators/DigitRecognizer.java
-src/main/evaluators/InstantDatabaseEvaluator.java
 todo
 notes
 dump
+data
 *.swp
 *.jar
-octave_dir/
-testing_dir/
-digit_recognizer/
-data
