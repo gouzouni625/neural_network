@@ -7,25 +7,46 @@ import main.utilities.data.DataSet;
 
 import org.opencv.core.Core;
 
+/** @class SimpleTrainer
+ *
+ *  @brief An implementation of a Trainer.
+ */
 public class SimpleTrainer extends Trainer{
-
-  public SimpleTrainer(int[] sizesOfLayers, String trainingSetPath,
-                                            String trainingLabelsPath,
-                                            String testingSetPath,
-                                            String testingLabelsPath,
-                                            Distorter distorter){
+  /**
+   *  @brief Constructor.
+   *
+   *  @param sizesOfLayers The size of the layers of the main.base.NeuralNetwork.
+   *  @param trainingSetPath The full path of the training set data.
+   *  @param trainingLabelsPath The full path of the training labels.
+   *  @param testingSetPath The full path of the testing set data.
+   *  @param testingLabelsPath The full path of the testing labels.
+   *  @param distorter The main.distorters.Distorter to be used to distort the training set data, while training.
+   */
+  public SimpleTrainer(int[] sizesOfLayers, String trainingSetPath, String trainingLabelsPath, String testingSetPath,
+                                            String testingLabelsPath, Distorter distorter){
     super(sizesOfLayers, trainingSetPath, trainingLabelsPath,
           testingSetPath, testingLabelsPath, distorter);
 
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   }
 
+  /**
+   *  @brief Constructor.
+   *
+   *  @param sizesOfLayers The size of the layers of the main.base.NeuralNetwork.
+   *  @param distorter The main.distorters.Distorter to be used to distort the training set data, while training.
+   */
   public SimpleTrainer(int[] sizesOfLayers, Distorter distorter){
     super(sizesOfLayers, "", "", "", "", distorter);
 
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   }
 
+  /**
+   *  @brief Loads a training and a testing set.
+   *
+   *  @throws Exception Doesn't throw an exception.
+   */
   @Override
   public void load(DataSet trainingSet, DataSet testingSet) throws Exception{
     trainingSet_ = new double[trainingSet.size()][sampleLength_];
@@ -54,6 +75,11 @@ public class SimpleTrainer extends Trainer{
 
   }
 
+  /**
+   *  @brief Trains a main.base.NeuralNetwork on the given data.
+   *
+   *  @throws Exception Doesn't throw an exception.
+   */
   @Override
   public void train() throws Exception{
     double[][] trainingSetBuffer = new double[numberOfTrainingSamples_][sampleLength_];
@@ -96,10 +122,8 @@ public class SimpleTrainer extends Trainer{
 
       // Actually train the neural network.
       for(int batch = 0;batch < numberOfTrainingSamples_ / batchSize_;batch++){
-        neuralNetwork_.train(Arrays.copyOfRange(trainingSet_,
-                                 batch * batchSize_, numberOfTrainingSamples_),
-                             Arrays.copyOfRange(trainingLabels_,
-                                 batch * batchSize_, numberOfTrainingSamples_),
+        neuralNetwork_.train(Arrays.copyOfRange(trainingSet_, batch * batchSize_, numberOfTrainingSamples_),
+                             Arrays.copyOfRange(trainingLabels_, batch * batchSize_, numberOfTrainingSamples_),
                              batchSize_, 1, gamma_);
       }
 
@@ -128,7 +152,9 @@ public class SimpleTrainer extends Trainer{
       if(accuracy > bestAccuracy){
         bestAccuracy = accuracy;
 
-        System.out.println("Found best accuracy, saving the neural network!");
+        if(!quiet_){
+         System.out.println("Found best accuracy, saving the neural network!");
+        }
         neuralNetwork_.saveNetwork(neuralNetworkSavePath_);
       }
 
