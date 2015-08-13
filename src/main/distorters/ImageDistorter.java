@@ -6,28 +6,37 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-/** \class ImageDistorter
- *  \brief Class that contains methods for distorting images by applying affine
- *         transformations on them.
+/** @class ImageDistorter
+ *
+ *  @brief Implementation of a Distorter of images.
+ *
+ *  Applies affine transformations on the given images.
  */
 public class ImageDistorter extends Distorter{
-
+  /**
+   *  @brief Default Constructor.
+   */
   public ImageDistorter(){
     super();
   }
 
+  /**
+   *  @brief Constructor.
+   *
+   *  @param distortFrequency The value for the distort frequency.
+   */
   public ImageDistorter(int distortFrequency){
     super(distortFrequency);
   }
 
-  /** \brief Applies random affine transformations on a set of data.
+  /**
+   *  @brief Applies random affine transformations on a set of data.
    *
-   *  \param data The set of data on which to apply the transformations.
-   *  \param sampleRows The number of rows of each sample if it is mapped on
-   *                    a grid.
-   *  \param sampleColumns The number of columns of each sample if it is mapped
-   *                       on a grid.
-   *  \return The transformed data.
+   *  @param data The set of data on which to apply the transformations.
+   *  @param sampleRows The number of rows of each sample image.
+   *  @param sampleColumns The number of columns of each sample image.
+   *
+   *  @return Returns the distorted data.
    */
   public double[][] distort(double[][] data){
     Random random = new Random();
@@ -88,22 +97,43 @@ public class ImageDistorter extends Distorter{
     return data;
   }
 
+  /**
+   *  @brief Setter method for the number of rows of each sample.
+   *
+   *  @param sampleRows The number of rows of each sample.
+   */
   public void setSampleRows(int sampleRows){
     sampleRows_ = sampleRows;
   }
 
+  /**
+   *  @brief Getter method for the number of rows of each sample.
+   *
+   *  @return Returns the number of rows of each sample.
+   */
   public int getSampleRows(){
     return sampleRows_;
   }
 
+  /**
+   *  @brief Setter method for the number of columns of each sample.
+   *
+   *  @param sampleColumns The number of rows of each sample.
+   */
   public void setSampleColumns(int sampleColumns){
     sampleColumns_ = sampleColumns;
   }
 
+  /**
+   *  @brief Getter method for the number of columns of each sample.
+   *
+   *  @return Returnes the number of columns of each sample.
+   */
   public int getSampleColumns(){
     return sampleColumns_;
   }
 
-  private int sampleRows_;
-  private int sampleColumns_;
+  private int sampleRows_; //!< The number of rows of each sample.
+  private int sampleColumns_; //!< The number of columns of each sample.
+
 }
