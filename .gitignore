@@ -1,19 +1,24 @@
-*.swp
-*.jar
-
+# Eclipse files
 .classpath
 .project
 
+# Binary files
+bin/
+
+# Doxygen generated files
+doxygen/html
+doxygen/latex
+
+# Other
+src/executables/
+src/main/evaluators/DigitRecognizer.java
+src/main/evaluators/InstantDatabaseEvaluator.java
 todo
 notes
 dump
-
-bin/
+*.swp
+*.jar
 octave_dir/
 testing_dir/
 digit_recognizer/
 data
-
-src/executables/
-src/main/evaluators/DigitRecognizer.java
-src/main/evaluators/InstantDatabaseEvaluator.java
