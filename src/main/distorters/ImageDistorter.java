@@ -33,8 +33,6 @@ public class ImageDistorter extends Distorter{
    *  @brief Applies random affine transformations on a set of data.
    *
    *  @param data The set of data on which to apply the transformations.
-   *  @param sampleRows The number of rows of each sample image.
-   *  @param sampleColumns The number of columns of each sample image.
    *
    *  @return Returns the distorted data.
    */

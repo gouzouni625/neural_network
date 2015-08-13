@@ -17,20 +17,34 @@ import com.mysql.jdbc.Statement;
 import main.utilities.Utilities;
 import main.utilities.data.DataSample;
 import main.utilities.data.DataSet;
-import main.utilities.traces.Point;
-import main.utilities.traces.Trace;
+import main.utilities.inkml.InkMLParser;
 import main.utilities.traces.TraceGroup;
 
-/** \class MySQLDataManager class. Connects to a MySQL database, retrieves
- *         data saved in inkML format, creates images of any size and saves
- *         the data to IDX formatted files.
+/** @class MySQLDataManager
+ *
+ *  @brief Connects to a MySQL database, retrieves data saved in inkML format, creates images of any size and saves
+ *         the data to IDX formatted files. To connect to MySQL, jdbc is used. For more information, please visit
+ *         http://www.oracle.com/technetwork/java/javase/jdbc/index.html
  */
 public class MySQLDataManager{
-
+  /**
+   *  @brief Default Constructor.
+   */
   public MySQLDataManager(){
   }
 
-  public MySQLDataManager(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableDataColumn, String databaseTableLabelsColumn){
+  /**
+   *  @brief Constructor.
+   *
+   *  @param database The database to connect to.
+   *  @param databaseUsername The user name to be used for the database.
+   *  @param databasePassword The password to be used for the database.
+   *  @param databaseTable The table of the database to read.
+   *  @param databaseTableDataColumn The column of the table to read the data.
+   *  @param databaseTableLabelsColumn The column of the table to read the labels of the data.
+   */
+  public MySQLDataManager(String database, String databaseUsername, String databasePassword, String databaseTable,
+                          String databaseTableDataColumn, String databaseTableLabelsColumn){
     database_ = database;
     databaseUsername_ = databaseUsername;
     databasePassword_ = databasePassword;
@@ -39,7 +53,22 @@ public class MySQLDataManager{
     databaseTableLabelsColumn_ = databaseTableLabelsColumn;
   }
 
-  public void loadFromDatabase(String database, String databaseUsername, String databasePassword, String databaseTable, String databaseTableDataColumn, String databaseTableLabelsColumn) throws SQLException, UnsupportedEncodingException{
+  /**
+   *  @brief Loads the data from the database.
+   *
+   *  @param database The database to connect to.
+   *  @param databaseUsername The user name to be used for the database.
+   *  @param databasePassword The password to be used for the database.
+   *  @param databaseTable The table of the database to read.
+   *  @param databaseTableDataColumn The column of the table to read the data.
+   *  @param databaseTableLabelsColumn The column of the table to read the labels of the data.
+   *
+   *  @throws SQLException Thrown from jdbc.
+   *  @throws UnsupportedEncodingException Thrown from jdbc.
+   */
+  public void loadFromDatabase(String database, String databaseUsername, String databasePassword, String databaseTable,
+                               String databaseTableDataColumn, String databaseTableLabelsColumn)
+                              throws SQLException, UnsupportedEncodingException{
     database_ = database;
     databaseUsername_ = databaseUsername;
     databasePassword_ = databasePassword;
@@ -50,6 +79,12 @@ public class MySQLDataManager{
     loadFromDatabase();
   }
 
+  /**
+   *  @brief Loads the data from the database.
+   *
+   *  @throws SQLException Thrown from jdbc.
+   *  @throws UnsupportedEncodingException Thrown from jdbc.
+   */
   public void loadFromDatabase() throws SQLException, UnsupportedEncodingException{
     databaseData_ = new ArrayList<TraceGroup>();
 
@@ -59,29 +94,11 @@ public class MySQLDataManager{
     ResultSet resultSet = statement.executeQuery("SELECT " + databaseTableDataColumn_ + " FROM " + databaseTable_);
 
     // Process the data. ======================================================
+    InkMLParser inkMLParser = new InkMLParser();
     while(resultSet.next()){
-      TraceGroup traceGroup = new TraceGroup();
-      String traceGroups = resultSet.getString(1);
+      inkMLParser.setXMLData(resultSet.getString(1));
 
-      int startOfTrace = traceGroups.indexOf("<trace>");
-      int endOfTrace = traceGroups.indexOf("</trace>");
-      while(startOfTrace != -1){
-        String[] traceData = traceGroups.substring(startOfTrace + 7, endOfTrace).split(", "); // ("<trace>").length = 7.
-
-        Trace trace = new Trace();
-        for(int i = 0;i < traceData.length;i++){
-          double x = Double.parseDouble(traceData[i].split(" ")[0]);
-          double y = Double.parseDouble(traceData[i].split(" ")[1]);
-          trace.add(new Point(x, y));
-        }
-        traceGroup.add(trace);
-
-        // ("</trace>").length = 8.
-        traceGroups = traceGroups.substring(endOfTrace + 8);
-        startOfTrace = traceGroups.indexOf("<trace>");
-        endOfTrace = traceGroups.indexOf("</trace>");
-      }
-      databaseData_.add(traceGroup);
+      databaseData_.add(inkMLParser.traceGroup_);
     }
 
     // Retrieve labels.
@@ -98,6 +115,13 @@ public class MySQLDataManager{
     connection.close();
   }
 
+  /**
+   *  @brief Saves a set of data to the database.
+   *
+   *  @param data The array of the data to save on the database.
+   *
+   *  @throws SQLException Thrown from jdbc.
+   */
   public void saveToDatabase(String[] data) throws SQLException{
     Connection connection = (Connection) DriverManager.getConnection(database_, databaseUsername_, databasePassword_);
     Statement statement = (Statement) connection.createStatement();
@@ -116,7 +140,19 @@ public class MySQLDataManager{
     connection.close();
   }
 
-  public void saveToIDX(Size imageSize, String dataFile, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
+  /**
+   *  @brief Saves the data retrieved from the database to IDX format.
+   *
+   *  @param imageSize The size of the images to transform the data to.
+   *  @param dataFile The file to save the data.
+   *  @param labelsFile The file to save the labels.
+   *  @param saveImages Flag to decide whether to save .tiff images of the data.
+   *  @param imagesPath The file to save .tiff images of the data.
+   *
+   *  @throws IOException If there is problem when writing to the file system.
+   */
+  public void saveToIDX(Size imageSize, String dataFile, String labelsFile, boolean saveImages, String imagesPath)
+                       throws IOException{
     byte[] labels = new byte[labels_.size()];
     for(int i = 0;i < labels_.size();i++){
       labels[i] = labels_.get(i);
@@ -125,7 +161,20 @@ public class MySQLDataManager{
     this.saveToIDX(imageSize, dataFile, labels, labelsFile, saveImages, imagesPath);
   }
 
-  public void saveToIDX(Size imageSize, String dataFile, byte[] labels, String labelsFile, boolean saveImages, String imagesPath) throws IOException{
+  /**
+   *  @brief Saves the data retrieved from the database to IDX format.
+   *
+   *  @param imageSize The size of the images to transform the data to.
+   *  @param dataFile The file to save the data.
+   *  @param labels The labels of the data.
+   *  @param labelsFile The file to save the labels.
+   *  @param saveImages Flag to decide whether to save .tiff images of the data.
+   *  @param imagesPath The file to save .tiff images of the data.
+   *
+   *  @throws IOException If there is problem when writing to the file system.
+   */
+  public void saveToIDX(Size imageSize, String dataFile, byte[] labels, String labelsFile, boolean saveImages,
+                        String imagesPath) throws IOException{
     Mat[] images = new Mat[databaseData_.size()];
     DataSet dataSet = new DataSet();
 
@@ -142,22 +191,32 @@ public class MySQLDataManager{
     dataSet.saveIDXFormat(dataFile, labelsFile);
   }
 
+  /**
+   *  @brief Getter method for the database data.
+   *
+   *  @return Returns the data retrieved from the database.
+   */
   public ArrayList<TraceGroup> getDatabaseData(){
     return databaseData_;
   }
 
+  /**
+   *  @brief Getter method for the database labels.
+   *
+   *  @return Returns the labels retrieved from the database.
+   */
   public ArrayList<Byte> getLabels(){
     return labels_;
   }
 
-  private String database_;
-  private String databaseUsername_;
-  private String databasePassword_;
-  private String databaseTable_;
-  private String databaseTableDataColumn_;
-  private String databaseTableLabelsColumn_;
+  private String database_; //!< The database that this MySQLDataManager will connect to.
+  private String databaseUsername_; //!< The user name that this MySQLDataManager will use.
+  private String databasePassword_; //!< The password that this MySQLDataManager will use.
+  private String databaseTable_; //!< The table that this MySQLDataManager will read from.
+  private String databaseTableDataColumn_; //!< The column that this MySQLDataManager will read the data from.
+  private String databaseTableLabelsColumn_; //!< The column that this MySQLDataManager will read the labels from.
 
-  private ArrayList<TraceGroup> databaseData_;
-  private ArrayList<Byte> labels_;
+  private ArrayList<TraceGroup> databaseData_; //!< The data retrieved from the database.
+  private ArrayList<Byte> labels_; //!< The labels retrieved by the database.
 
 }
