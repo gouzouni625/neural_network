@@ -5,6 +5,9 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /** @class NeuralNetwork
  *
@@ -13,6 +16,11 @@ import java.io.IOException;
  *  The implementation includes the NeuralNetwork parameters, training and evaluating methods.
  */
 public class NeuralNetwork{
+
+  public NeuralNetwork(){
+    momentumCoefficient_ = 0;
+  }
+
   /**
    *  @brief Constructor
    *
@@ -153,14 +161,16 @@ public class NeuralNetwork{
    *
    *  @param path The absolute, or relative path of the file where the parameters will be saved.
    *
-   *  @throws FileNotFoundException When the file is not found.
    *  @throws IOException When an exception occurs while writing on the file.
-   *
-   *  @todo The NeuralNetwork parameters should be saved in xml format.
    */
-  public void saveNetwork(String path) throws IOException{
+  public void saveToBinary(String path) throws IOException{
     FileOutputStream fileOutputStream = new FileOutputStream(path);
     DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
+
+    dataOutputStream.writeInt(numberOfLayers_);
+    for(int i = 0;i < numberOfLayers_;i++){
+      dataOutputStream.writeInt(sizesOfLayers_[i]);
+    }
 
     for(int i = 0;i < numberOfLayers_ - 1;i++){
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
@@ -176,16 +186,55 @@ public class NeuralNetwork{
   }
 
   /**
-   *  @brief Loads the parameters for this NeuralNetwork from a file.
+   *  @brief Saves the parameters of this NeuralNetwork to an xml file.
+   *
+   *  @param path The absolute or relative path of the file where the parameters will be saved.
+   *
+   *  @throws IOException When an exception occurs while writing on the file.
+   */
+  public void saveToXML(String path) throws IOException{
+    PrintWriter printWriter = new PrintWriter(path);
+
+    printWriter.print("<sizes_of_layers>");
+    for(int i = 0;i < numberOfLayers_ - 1;i++){
+      printWriter.print(sizesOfLayers_[i] + " ");
+    }
+    printWriter.println(sizesOfLayers_[numberOfLayers_ - 1] + "</sizes_of_layers>");
+
+    for(int i = 0;i < numberOfLayers_ - 1;i++){
+      printWriter.println("<layer>");
+
+      for(int j = 0;j < sizesOfLayers_[i + 1];j++){
+        printWriter.print("  <neuron>\n    <bias>" + biases_[i][j] + "</bias>\n    <weights>");
+
+        for(int k = 0;k < sizesOfLayers_[i] - 1;k++){
+          printWriter.print(weights_[i][j][k] + " ");
+        }
+        printWriter.println(weights_[i][j][sizesOfLayers_[i] - 1] + "</weights>\n  </neuron>");
+      }
+
+      printWriter.println("</layer>");
+    }
+
+    printWriter.close();
+  }
+
+  /**
+   *  @brief Loads the parameters for this NeuralNetwork from a binary file.
    *
    *  @param path The path of the file where the parameters are saved.
    *
-   *  @throws FileNotFoundException When the file is not found.
    *  @throws IOException When an exception occurs while reading from the file.
    */
-  public void loadNetwork(String path) throws IOException{
+  public void loadFromBinary(String path) throws IOException{
     FileInputStream fileInputStream = new FileInputStream(path);
     DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+
+    numberOfLayers_ = dataInputStream.readInt();
+    sizesOfLayers_ = new int[numberOfLayers_];
+    for(int i = 0;i < numberOfLayers_;i++){
+      sizesOfLayers_[i] = dataInputStream.readInt();
+    }
 
     for(int i = 0;i < numberOfLayers_ - 1;i++){
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
@@ -198,6 +247,78 @@ public class NeuralNetwork{
     }
 
     dataInputStream.close();
+  }
+
+  /**
+   *  @brief Loads the parameters for this NeuralNetwork from an xml file.
+   *
+   *  @param path The path of the file where the parameters are saved.
+   *
+   *  @throws IOException When an exception occurs while reading from the file.
+   */
+  public void loadFromXML(String path) throws IOException{
+    // Load all the data from the given file.
+    String xmlData = new String(Files.readAllBytes(Paths.get(path)));
+
+    // Parse the sizes of the layers.
+    int startOfSizesOfLayers = xmlData.indexOf("<sizes_of_layers>");
+    int endOfSizesOfLayers = xmlData.indexOf("</sizes_of_layers>");
+
+    String[] sizesOfLayers = xmlData.substring(startOfSizesOfLayers + ("<sizes_of_layers>").length(), endOfSizesOfLayers)
+                                    .split(" ");
+
+    numberOfLayers_ = sizesOfLayers.length;
+    sizesOfLayers_ = new int[numberOfLayers_];
+    for(int i = 0;i < numberOfLayers_;i++){
+      sizesOfLayers_[i] = Integer.parseInt(sizesOfLayers[i]);
+    }
+
+    // Allocate the needed memory for the weights and the biases.
+    weights_ = new double[numberOfLayers_ - 1][][];
+    biases_ = new double[numberOfLayers_ - 1][];
+
+    for(int i = 0;i < numberOfLayers_ - 1;i++){
+      weights_[i] = new double[sizesOfLayers_[i + 1]][];
+      biases_[i] = new double[sizesOfLayers_[i + 1]];
+
+      for(int j = 0;j < sizesOfLayers_[i + 1];j++){
+        weights_[i][j] = new double[sizesOfLayers_[i]];
+      }
+    }
+
+    xmlData = xmlData.substring(endOfSizesOfLayers + ("</sizes_of_layers>").length());
+
+    // Parse each layer.
+    int startOfLayer = xmlData.indexOf("<layer>");
+    int currentLayer = 0;
+    while(startOfLayer != -1){
+
+      // Parse each neuron in the current layer.
+      int currentNeuron = 0;
+      while(currentNeuron < sizesOfLayers_[currentLayer + 1]){
+
+        int startOfBias = xmlData.indexOf("<bias>");
+        int endOfBias = xmlData.indexOf("</bias>");
+
+        biases_[currentLayer][currentNeuron] = Double.parseDouble(xmlData.substring(startOfBias + ("<bias>").length(),
+                                                                                    endOfBias));
+
+        int startOfWeights = xmlData.indexOf("<weights>");
+        int endOfWeights = xmlData.indexOf("</weights>");
+
+        String[] weights = xmlData.substring(startOfWeights + ("<weights>").length(), endOfWeights).split(" ");
+        for(int i = 0;i < weights.length;i++){
+          weights_[currentLayer][currentNeuron][i] = Double.parseDouble(weights[i]);
+        }
+
+        xmlData = xmlData.substring(xmlData.indexOf("</neuron>") + ("</neuron>").length());
+        currentNeuron++;
+      }
+
+      xmlData = xmlData.substring(xmlData.indexOf("</layer>") + ("</layer>").length());
+      startOfLayer = xmlData.indexOf("<layer>");
+      currentLayer++;
+    }
   }
 
   /**

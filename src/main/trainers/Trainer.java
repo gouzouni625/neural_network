@@ -97,7 +97,7 @@ public abstract class Trainer{
    *  @throws IOException In case main.base.NeuralNetwork.saveNetwork throws an exception.
    */
   public void save(String fullPath) throws IOException{
-    neuralNetwork_.saveNetwork(fullPath);
+    neuralNetwork_.saveToBinary(fullPath);
   }
 
   /**

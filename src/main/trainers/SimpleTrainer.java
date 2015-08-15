@@ -155,7 +155,7 @@ public class SimpleTrainer extends Trainer{
         if(!quiet_){
          System.out.println("Found best accuracy, saving the neural network!");
         }
-        neuralNetwork_.saveNetwork(neuralNetworkSavePath_);
+        neuralNetwork_.saveToBinary(neuralNetworkSavePath_);
       }
 
       if(!quiet_){
