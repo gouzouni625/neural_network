@@ -322,6 +322,40 @@ public class NeuralNetwork{
   }
 
   /**
+   *  @brief Creates a NeuralNetwork and loads the parameters from the given binary file.
+   *
+   *  @param path The path of the binary file that holds the parameters of the NeuralNetwork to be created.
+   *
+   *  @return Returns the created NeuralNetwork.
+   *
+   *  @throws IOException When an exception occurs while reading from the file.
+   */
+  public static NeuralNetwork createFromBinary(String path) throws IOException{
+    NeuralNetwork neuralNetwork = new NeuralNetwork();
+
+    neuralNetwork.loadFromBinary(path);
+
+    return neuralNetwork;
+  }
+
+  /**
+   *  @brief Creates a NeuralNetwork and loads the parameters from the given XML file.
+   *
+   *  @param path The path of the XML file that holds the parameters of the NeuralNetwork to be created.
+   *
+   *  @return Returns the created NeuralNetwork.
+   *
+   *  @throws IOException When an exception occurs while reading from the file.
+   */
+  public static NeuralNetwork createFromXML(String path) throws IOException{
+    NeuralNetwork neuralNetwork = new NeuralNetwork();
+
+    neuralNetwork.loadFromXML(path);
+
+    return neuralNetwork;
+  }
+
+  /**
    *  @brief Implements the back propagation algorithm to calculate the derivative of the cost function with respect
    *         to each parameter.
    *
