@@ -236,6 +236,19 @@ public class NeuralNetwork{
       sizesOfLayers_[i] = dataInputStream.readInt();
     }
 
+    // Allocate the needed memory for the weights and the biases.
+    weights_ = new double[numberOfLayers_ - 1][][];
+    biases_ = new double[numberOfLayers_ - 1][];
+
+    for(int i = 0;i < numberOfLayers_ - 1;i++){
+      weights_[i] = new double[sizesOfLayers_[i + 1]][];
+      biases_[i] = new double[sizesOfLayers_[i + 1]];
+
+      for(int j = 0;j < sizesOfLayers_[i + 1];j++){
+        weights_[i][j] = new double[sizesOfLayers_[i]];
+      }
+    }
+
     for(int i = 0;i < numberOfLayers_ - 1;i++){
       for(int j = 0;j < sizesOfLayers_[i + 1];j++){
         biases_[i][j] = dataInputStream.readDouble();
