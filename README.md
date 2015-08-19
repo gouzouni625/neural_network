@@ -20,26 +20,26 @@ To build the code, a pom.xml file is provided to be used with Apache Maven.
 Make sure you have Apache Maven installed and the neural_network repository
 cloned on your local filesystem. After that, do:
 
-```
+```bash
 cd neural_network
 mvn test-compile
 ```
 
 to build the code and the tests. If you want to run the tests, do:
 
-```
+```bash
 mvn test
 ```
 
 . If you want to package everything to a jar, to:
 
-```
+```bash
 mvn package
 ```
 
 . To remove everything done with Apache Maven do:
 
-```
+```bash
 mvn clean
 ````
 
@@ -50,7 +50,7 @@ The documentation is written using Doxygen[3]. To generate the documentation
 pages, you have to install Doxygen and download the code to your local file
 system. After that, do:
 
-```
+```bash
 cd neural_network/doxygen
 doxygen Doxyfile
 ```
