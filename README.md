@@ -27,15 +27,21 @@ mvn test-compile
 
 to build the code and the tests. If you want to run the tests, do:
 
-`mvn test`
+```
+mvn test
+```
 
 . If you want to package everything to a jar, to:
 
-`mvn package`
+```
+mvn package
+```
 
 . To remove everything done with Apache Maven do:
 
-`mvn clean`
+```
+mvn clean
+````
 
 .
 
