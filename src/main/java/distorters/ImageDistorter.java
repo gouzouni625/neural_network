@@ -1,4 +1,4 @@
-package main.distorters;
+package main.java.distorters;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package main.utilities.data;
+package main.java.utilities.data;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

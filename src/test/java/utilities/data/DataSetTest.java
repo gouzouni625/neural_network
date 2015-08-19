@@ -1,4 +1,4 @@
-package tests.utilities.data;
+package test.java.utilities.data;
 
 import static org.junit.Assert.*;
 
@@ -6,16 +6,16 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import main.utilities.data.DataSample;
-import main.utilities.data.DataSet;
+import main.java.utilities.data.DataSample;
+import main.java.utilities.data.DataSet;
 
 /** @class DataSetTest
  *
- *  @brief Class that contains tests for main.utilities.data.DataSet class.
+ *  @brief Class that contains tests for main.java.utilities.data.DataSet class.
  */
 public class DataSetTest{
   /**
-   *  @brief Tests the constructors, size, get and add methods of main.utilities.data.DataSet class.
+   *  @brief Tests the constructors, size, get and add methods of main.java.utilities.data.DataSet class.
    */
   @Test
   public void testDataSet(){
@@ -43,7 +43,7 @@ public class DataSetTest{
   }
 
   /**
-   *  @brief Tests saveIDXFormat and loadIDXFormat methods of main.utilities.data.DataSet class.
+   *  @brief Tests saveIDXFormat and loadIDXFormat methods of main.java.utilities.data.DataSet class.
    *
    *  @throws IOException When saveIDXFormat or loadIDXFormat throw an exception.
    */
@@ -57,8 +57,11 @@ public class DataSetTest{
 
     dataSet1.add(dataSample);
 
-    String dataFile = "data/tests/utilities/data/DataSet/testIDXFormat_data";
-    String labelsFile = "data/tests/utilities/data/DataSet/testIDXFormat_labels";
+    //String dataFile = "data/tests/utilities/data/DataSet/testIDXFormat_data";
+    //String labelsFile = "data/tests/utilities/data/DataSet/testIDXFormat_labels";
+
+    String dataFile = "testIDXFormat_data";
+    String labelsFile = "testIDXFormat_labels";
 
     dataSet1.saveIDXFormat(dataFile, labelsFile);
 
@@ -74,7 +77,7 @@ public class DataSetTest{
   }
 
   /**
-   *  @brief Tests shuffle method of main.utilities.data.DataSet class.
+   *  @brief Tests shuffle method of main.java.utilities.data.DataSet class.
    */
   @Test
   public void testShuffle(){
@@ -101,7 +104,7 @@ public class DataSetTest{
   }
 
   /**
-   *  @brief Tests static add method of main.utilities.data.DataSet class.
+   *  @brief Tests static add method of main.java.utilities.data.DataSet class.
    */
   @Test
   public void testStaticAdd(){
@@ -137,7 +140,7 @@ public class DataSetTest{
   }
 
   /**
-   *  @brief Tests subDataSet method of main.utilities.data.DataSet class.
+   *  @brief Tests subDataSet method of main.java.utilities.data.DataSet class.
    */
   @Test
   public void testSubDataSet(){

@@ -1,9 +1,9 @@
-package main.trainers;
+package main.java.trainers;
 
 import java.util.Arrays;
 
-import main.distorters.Distorter;
-import main.utilities.data.DataSet;
+import main.java.distorters.Distorter;
+import main.java.utilities.data.DataSet;
 
 import org.opencv.core.Core;
 
@@ -15,12 +15,12 @@ public class SimpleTrainer extends Trainer{
   /**
    *  @brief Constructor.
    *
-   *  @param sizesOfLayers The size of the layers of the main.base.NeuralNetwork.
+   *  @param sizesOfLayers The size of the layers of the main.java.base.NeuralNetwork.
    *  @param trainingSetPath The full path of the training set data.
    *  @param trainingLabelsPath The full path of the training labels.
    *  @param testingSetPath The full path of the testing set data.
    *  @param testingLabelsPath The full path of the testing labels.
-   *  @param distorter The main.distorters.Distorter to be used to distort the training set data, while training.
+   *  @param distorter The main.java.distorters.Distorter to be used to distort the training set data, while training.
    */
   public SimpleTrainer(int[] sizesOfLayers, String trainingSetPath, String trainingLabelsPath, String testingSetPath,
                                             String testingLabelsPath, Distorter distorter){
@@ -33,8 +33,8 @@ public class SimpleTrainer extends Trainer{
   /**
    *  @brief Constructor.
    *
-   *  @param sizesOfLayers The size of the layers of the main.base.NeuralNetwork.
-   *  @param distorter The main.distorters.Distorter to be used to distort the training set data, while training.
+   *  @param sizesOfLayers The size of the layers of the main.java.base.NeuralNetwork.
+   *  @param distorter The main.java.distorters.Distorter to be used to distort the training set data, while training.
    */
   public SimpleTrainer(int[] sizesOfLayers, Distorter distorter){
     super(sizesOfLayers, "", "", "", "", distorter);
@@ -76,7 +76,7 @@ public class SimpleTrainer extends Trainer{
   }
 
   /**
-   *  @brief Trains a main.base.NeuralNetwork on the given data.
+   *  @brief Trains a main.java.base.NeuralNetwork on the given data.
    *
    *  @throws Exception Doesn't throw an exception.
    */

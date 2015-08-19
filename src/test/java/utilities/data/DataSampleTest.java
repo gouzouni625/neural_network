@@ -1,10 +1,10 @@
-package tests.utilities.data;
+package test.java.utilities.data;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import main.utilities.data.DataSample;
+import main.java.utilities.data.DataSample;
 
 /** @class DataSampleTest
  *

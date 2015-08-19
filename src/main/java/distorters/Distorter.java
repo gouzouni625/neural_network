@@ -1,4 +1,4 @@
-package main.distorters;
+package main.java.distorters;
 
 /** @class Distorter
  *

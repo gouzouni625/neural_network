@@ -1,10 +1,10 @@
-package main.trainers;
+package main.java.trainers;
 
 import java.io.IOException;
 
-import main.base.NeuralNetwork;
-import main.distorters.Distorter;
-import main.utilities.data.DataSet;
+import main.java.base.NeuralNetwork;
+import main.java.distorters.Distorter;
+import main.java.utilities.data.DataSet;
 
 /** @class Trainer
  *
@@ -14,7 +14,7 @@ public abstract class Trainer{
   /**
    *  @brief Constructor.
    *
-   *  @param sizesOfLayers The size of the layers of the main.base.NeuralNetwork.
+   *  @param sizesOfLayers The size of the layers of the main.java.base.NeuralNetwork.
    */
   public Trainer(int[] sizesOfLayers){
     sizesOfLayers_ = sizesOfLayers;
@@ -31,7 +31,7 @@ public abstract class Trainer{
   /**
    *  @brief Constructor
    *
-   *  @param sizesOfLayers The size of the layers of the main.base.NeuralNetwork.
+   *  @param sizesOfLayers The size of the layers of the main.java.base.NeuralNetwork.
    *  @param trainingSetPath The full path of the training set data.
    *  @param trainingLabelsPath The full path of the training labels.
    *  @param testingSetPath The full path of the testing set data.
@@ -58,7 +58,7 @@ public abstract class Trainer{
    *  @param trainingLabelsPath The full path of the training labels.
    *  @param testingSetPath The full path of the testing set data.
    *  @param testingLabelsPath The full path of the testing labels.
-   *  @param distorter The main.distorters.Distorter to be used to distort the training set data, while training.
+   *  @param distorter The main.java.distorters.Distorter to be used to distort the training set data, while training.
    */
   public Trainer(int[] sizesOfLayers, String trainingSetPath, String trainingLabelsPath, String testingSetPath,
                                       String testingLabelsPath, Distorter distorter){
@@ -82,28 +82,28 @@ public abstract class Trainer{
   abstract public void load(DataSet trainingSet, DataSet testingSet) throws Exception;
 
   /**
-   *  @brief Trains a main.base.NeuralNetwork on the given data.
+   *  @brief Trains a main.java.base.NeuralNetwork on the given data.
    *
    *  @throws Exception The exception is thrown to allow classes extending this class, to save the
-   *          main.base.NeuralNetwork at the end of training using file output streams.
+   *          main.java.base.NeuralNetwork at the end of training using file output streams.
    */
   abstract public void train() throws Exception;
 
   /**
-   *  @brief Saves the trained main.base.NeuralNetwork.
+   *  @brief Saves the trained main.java.base.NeuralNetwork.
    *
-   *  @param fullPath The full path of the file to save the main.base.NeuralNetwork.
+   *  @param fullPath The full path of the file to save the main.java.base.NeuralNetwork.
    *
-   *  @throws IOException In case main.base.NeuralNetwork.saveNetwork throws an exception.
+   *  @throws IOException In case main.java.base.NeuralNetwork.saveNetwork throws an exception.
    */
   public void save(String fullPath) throws IOException{
     neuralNetwork_.saveToBinary(fullPath);
   }
 
   /**
-   *  @brief Setter method for the main.base.NeuralNetwork.
+   *  @brief Setter method for the main.java.base.NeuralNetwork.
    *
-   *  @param neuralNetwork The main.base.NeuralNetwork to be used.
+   *  @param neuralNetwork The main.java.base.NeuralNetwork to be used.
    */
   public void setNeuralNetwork(NeuralNetwork neuralNetwork){
     neuralNetwork_ = neuralNetwork;
@@ -111,9 +111,9 @@ public abstract class Trainer{
   }
 
   /**
-   *  @brief Getter method for the main.base.NeuralNetwork.
+   *  @brief Getter method for the main.java.base.NeuralNetwork.
    *
-   *  @return Returns the current main.base.NeuralNetwork.
+   *  @return Returns the current main.java.base.NeuralNetwork.
    */
   public NeuralNetwork getNeuralNetwork(){
     return neuralNetwork_;
@@ -192,18 +192,18 @@ public abstract class Trainer{
   }
 
   /**
-   *  @brief Setter method for the main.distorters.Distorter.
+   *  @brief Setter method for the main.java.distorters.Distorter.
    *
-   *  @param distorter The main.distorters.Distorter to be used.
+   *  @param distorter The main.java.distorters.Distorter to be used.
    */
   public void setDistorter(Distorter distorter){
     distorter_ = distorter;
   }
 
   /**
-   *  @brief Getter method for the main.distorters.Distorter.
+   *  @brief Getter method for the main.java.distorters.Distorter.
    *
-   *  @return Returns the current main.distorters.Distorter.
+   *  @return Returns the current main.java.distorters.Distorter.
    */
   public Distorter getDistorter(){
     return distorter_;
@@ -248,7 +248,7 @@ public abstract class Trainer{
   /**
    *  @brief Setter method for the number of labels.
    *
-   *  This is the size of the output layer of the main.base.NeuralNetwork.
+   *  This is the size of the output layer of the main.java.base.NeuralNetwork.
    *
    *  @param numberOfLabels The number of labels.
    */
@@ -259,7 +259,7 @@ public abstract class Trainer{
   /**
    *  @brief Getter method for the number of labels.
    *
-   *  This is the size of the output layer of the main.base.NeuralNetwork.
+   *  This is the size of the output layer of the main.java.base.NeuralNetwork.
    *
    *  @return Returns the number of labels.
    */
@@ -270,7 +270,7 @@ public abstract class Trainer{
   /**
    *  @brief Setter method for the length of each sample.
    *
-   *  This is the size of the input layer of the main.base.NeuralNetwork.
+   *  This is the size of the input layer of the main.java.base.NeuralNetwork.
    *
    *  @param sampleLength The sample length.
    */
@@ -281,7 +281,7 @@ public abstract class Trainer{
   /**
    *  @brief Getter method for the length of each sample.
    *
-   *  This is the size of the input layer of the main.base.NeuralNetwork.
+   *  This is the size of the input layer of the main.java.base.NeuralNetwork.
    *
    *  @return Returns the sample length.
    */
@@ -310,7 +310,7 @@ public abstract class Trainer{
   /**
    *  @brief Setter method for the number of epochs.
    *
-   *  An epoch is done when the parameters of the main.base.NeuralNetwork have been updated using the whole set of data.
+   *  An epoch is done when the parameters of the main.java.base.NeuralNetwork have been updated using the whole set of data.
    *
    *  @param numberOfEpochs The number of epochs.
    */
@@ -321,7 +321,7 @@ public abstract class Trainer{
   /**
    *  @brief Getter method for the number of epochs.
    *
-   *  An epoch is done when the parameters of the main.base.NeuralNetwork have been updated using the whole set of data.
+   *  An epoch is done when the parameters of the main.java.base.NeuralNetwork have been updated using the whole set of data.
 
    *  @return Returns the number of epochs.
    */
@@ -332,9 +332,9 @@ public abstract class Trainer{
   /**
    *  @brief Setter method for the batch size.
    *
-   *  A batch is the smallest amount of data that are used to update the parameters of the main.base.NeuralNetwork.
-   *  In every epoch, the training set is split into batches and the parameters of the main.base.NeuralNetwork get updated
-   *  as many times as the batches are.
+   *  A batch is the smallest amount of data that are used to update the parameters of the main.java.base.NeuralNetwork.
+   *  In every epoch, the training set is split into batches and the parameters of the main.java.base.NeuralNetwork get
+   *  updated as many times as the batches are.
    *
    *  @param batchSize The size of the batch.
    */
@@ -345,9 +345,9 @@ public abstract class Trainer{
   /**
    *  @brief Getter method for the batch size.
    *
-   *  A batch is the smallest amount of data that are used to update the parameters of the main.base.NeuralNetwork.
-   *  In every epoch, the training set is split into batches and the parameters of the main.base.NeuralNetwork get updated
-   *  as many times as the batches are.
+   *  A batch is the smallest amount of data that are used to update the parameters of the main.java.base.NeuralNetwork.
+   *  In every epoch, the training set is split into batches and the parameters of the main.java.base.NeuralNetwork get
+   *  updated as many times as the batches are.
    *
    *  @return Returns the size of the batch.
    */
@@ -378,25 +378,25 @@ public abstract class Trainer{
   }
 
   /**
-   *  @brief Setter method for the main.base.NeuralNetwork save path.
+   *  @brief Setter method for the main.java.base.NeuralNetwork save path.
    *
-   *  @param neuralNetworkSavePath The full path of the file to save the main.base.NeuralNetwork.
+   *  @param neuralNetworkSavePath The full path of the file to save the main.java.base.NeuralNetwork.
    */
   public void setNeuralNetworkSavePath(String neuralNetworkSavePath){
     neuralNetworkSavePath_ = neuralNetworkSavePath;
   }
 
   /**
-   *  @brief Getter method for the main.base.NeuralNetwork save path.
+   *  @brief Getter method for the main.java.base.NeuralNetwork save path.
    *
-   *  @return Returns the main.base.NeuralNetwork save path.
+   *  @return Returns the main.java.base.NeuralNetwork save path.
    */
   public String getNeuralNetworkSavePath(){
     return neuralNetworkSavePath_;
   }
 
-  protected int[] sizesOfLayers_; //!< The sizes of the layers of the main.base.NeuralNetwork.
-  protected NeuralNetwork neuralNetwork_; //!< The main.base.NeuralNetwork of this Trainer.
+  protected int[] sizesOfLayers_; //!< The sizes of the layers of the main.java.base.NeuralNetwork.
+  protected NeuralNetwork neuralNetwork_; //!< The main.java.base.NeuralNetwork of this Trainer.
 
   protected double[][] trainingSet_; //!< The training set of data of this Trainer.
   protected double[][] trainingLabels_; //!< The labels of the training set of this Trainer.
@@ -405,16 +405,16 @@ public abstract class Trainer{
 
   protected int numberOfTrainingSamples_; //!< The number of training samples of this Trainer.
   protected int numberOfTestingSamples_; //!< The number of testing samples of this Trainer.
-  protected int numberOfLabels_; //!< The number of labels of the main.base.NeuralNetwork of this Trainer.
+  protected int numberOfLabels_; //!< The number of labels of the main.java.base.NeuralNetwork of this Trainer.
   protected int sampleLength_; //!< The length of each sample of this Trainer.
 
   protected String trainingSetPath_; //!< The training set path of this Trainer.
   protected String trainingLabelsPath_; //!< The training labels path of this Trainer.
   protected String testingSetPath_; //!< The testing set path of this Trainer.
   protected String testingLabelsPath_; //!< The testing labels path of this Trainer.
-  protected String neuralNetworkSavePath_; //!< The save path of the main.base.NeuralNetwork of this Trainer.
+  protected String neuralNetworkSavePath_; //!< The save path of the main.java.base.NeuralNetwork of this Trainer.
 
-  protected Distorter distorter_; //!< The main.distorters.Distorter of this Trainer.
+  protected Distorter distorter_; //!< The main.java.distorters.Distorter of this Trainer.
 
   protected int numberOfEpochs_; //!< The number of epochs of this Trainer.
   protected int batchSize_; //!< The size of the batch of this Trainer.
