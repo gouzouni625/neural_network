@@ -1,10 +1,10 @@
-package main.java.trainers;
+package org.nn.trainers;
 
 import java.io.IOException;
 
-import main.java.base.NeuralNetwork;
-import main.java.distorters.Distorter;
-import main.java.utilities.data.DataSet;
+import org.nn.base.NeuralNetwork;
+import org.nn.distorters.Distorter;
+import org.nn.utilities.data.DataSet;
 
 /** @class Trainer
  *

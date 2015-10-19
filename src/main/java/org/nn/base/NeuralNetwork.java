@@ -1,4 +1,4 @@
-package main.java.base;
+package org.nn.base;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

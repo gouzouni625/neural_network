@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import main.java.utilities.data.DataSample;
+import org.nn.utilities.data.DataSample;
 
 /** @class DataSampleTest
  *

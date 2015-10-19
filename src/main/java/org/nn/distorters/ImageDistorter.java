@@ -1,10 +1,9 @@
-package main.java.distorters;
+package org.nn.distorters;
+
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import java.util.Random;
-
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
 /** @class ImageDistorter
  *
@@ -39,20 +38,15 @@ public class ImageDistorter extends Distorter{
   public double[][] distort(double[][] data){
     Random random = new Random();
     double destortionType, parameter;
-    Mat trfMtx = new Mat(2, 3, CvType.CV_64F);
-    Mat image = new Mat(sampleRows_, sampleColumns_, CvType.CV_64F);
+    AffineTransform affineTransform = new AffineTransform();
+    BufferedImage image = new BufferedImage(sampleColumns_, sampleRows_, BufferedImage.TYPE_BYTE_GRAY);
 
-    for(int i = 0;i < data.length;i++){
+    /*for(int i = 0;i < data.length;i++){
       destortionType = random.nextDouble();
 
       if(destortionType < 0.25){ // Rotating. [-pi/12, pi/12).
         parameter = ((2 * random.nextDouble() - 1) / 12) * Math.PI; // Angle.
-        trfMtx.put(0, 0, Math.cos(parameter));
-        trfMtx.put(0, 1, Math.sin(parameter));
-        trfMtx.put(0, 2, 0);
-        trfMtx.put(1, 0, -Math.sin(parameter));
-        trfMtx.put(1, 1, Math.cos(parameter));
-        trfMtx.put(1, 2, 0);
+
       }
       else if(destortionType < 0.5){  // Scaling. [0.85, 1.15).
         // Volume for horizontal axis.
@@ -90,7 +84,7 @@ public class ImageDistorter extends Distorter{
         }
       }
 
-    }
+    }*/
 
     return data;
   }

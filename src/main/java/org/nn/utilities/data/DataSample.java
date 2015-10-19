@@ -1,4 +1,4 @@
-package main.java.utilities.data;
+package org.nn.utilities.data;
 
 /** @class DataSample
  *

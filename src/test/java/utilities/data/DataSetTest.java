@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import main.java.utilities.data.DataSample;
-import main.java.utilities.data.DataSet;
+import org.nn.utilities.data.DataSample;
+import org.nn.utilities.data.DataSet;
 
 /** @class DataSetTest
  *

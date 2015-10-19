@@ -1,11 +1,10 @@
-package main.java.trainers;
+package org.nn.trainers;
 
 import java.util.Arrays;
 
-import main.java.distorters.Distorter;
-import main.java.utilities.data.DataSet;
+import org.nn.distorters.Distorter;
+import org.nn.utilities.data.DataSet;
 
-import org.opencv.core.Core;
 
 /** @class SimpleTrainer
  *
@@ -27,7 +26,7 @@ public class SimpleTrainer extends Trainer{
     super(sizesOfLayers, trainingSetPath, trainingLabelsPath,
           testingSetPath, testingLabelsPath, distorter);
 
-    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   }
 
   /**
@@ -39,7 +38,7 @@ public class SimpleTrainer extends Trainer{
   public SimpleTrainer(int[] sizesOfLayers, Distorter distorter){
     super(sizesOfLayers, "", "", "", "", distorter);
 
-    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   }
 
   /**

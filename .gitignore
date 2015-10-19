@@ -2,19 +2,17 @@
 .classpath
 .project
 
-# Binary files
-bin/
+*.iml
+.idea
 
 # Doxygen generated files
 doxygen/html
 doxygen/latex
 
 # Other
-testing_dir/
-src/executables/
 todo
 notes
 dump
-data
-*.swp
-*.jar
+/data
+src/executables/
+/target/
