@@ -1,7 +1,7 @@
 package org.nn.distorters;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
+import org.improc.core.Core;
+import org.improc.image.Image;
 
 import java.util.Random;
 
@@ -29,18 +29,36 @@ public class ImageDistorter extends Distorter{
   }
 
   /**
-   *  @brief Applies random affine transformations on a set of data.
+   *  @brief The method that will be called to apply a distortion on an image.
    *
    *  @param data The set of data on which to apply the transformations.
    *
-   *  @return Returns the distorted data.
+   *  @return Returns the distorted image.
    */
   public double[][] distort(double[][] data){
     Random random = new Random();
     double destortionType, parameter;
-    AffineTransform affineTransform = new AffineTransform();
-    BufferedImage image = new BufferedImage(sampleColumns_, sampleRows_, BufferedImage.TYPE_BYTE_GRAY);
+    double[][] affineMatrix = new double[2][2];
 
+    parameter = ((2 * random.nextDouble() - 1) / 12) * Math.PI; // Angle.
+    affineMatrix[0][0] = Math.cos(parameter);
+    affineMatrix[0][1] = Math.sin(parameter);
+    affineMatrix[1][0] = -Math.sin(parameter);
+    affineMatrix[1][1] = Math.cos(parameter);
+
+    Image image = new Image(sampleColumns_, sampleRows_);
+    for(int x = 0;x < sampleColumns_;x++){
+      for(int y = 0;y < sampleRows_;x++){
+        image.setPixel(x, y, (byte)(data[y][x] * 100));
+      }
+    }
+    image = Core.affineTransformRotate(image, affineMatrix);
+    for(int x = 0;x < sampleColumns_;x++){
+      for(int y = 0;y < sampleRows_;x++){
+        data[y][x] = (double)image.getPixel(x, y) / 100;
+      }
+    }
+    return data;
     /*for(int i = 0;i < data.length;i++){
       destortionType = random.nextDouble();
 
@@ -85,8 +103,6 @@ public class ImageDistorter extends Distorter{
       }
 
     }*/
-
-    return data;
   }
 
   /**

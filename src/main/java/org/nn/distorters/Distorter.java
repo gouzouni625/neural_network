@@ -1,11 +1,13 @@
 package org.nn.distorters;
 
+import org.improc.image.Image;
+
 /** @class Distorter
  *
  *  @brief Implements and abstract Distorter.
  *
- *  A Distorter is used to apply distortions on data. This method is used to virtually increase the size of a set of
- *  data when using it to train a machine learning algorithm.
+ *  A Distorter is used to apply distortions on data. This method is used to virtually increase the
+ *  size of a set of data when using it to train a machine learning algorithm.
  */
 public abstract class Distorter{
   /**
@@ -18,19 +20,19 @@ public abstract class Distorter{
   /**
    *  @brief Constructor.
    *
-   *  @param distortFrequency The value for the distort frequency. This is a number denoting the frequency that the
-   *         distortions should be applied.
+   *  @param distortFrequency The value for the distort frequency. This is a number denoting the
+   *                          frequency that the distortions should be applied.
    */
   public Distorter(int distortFrequency){
     distortFrequency_ = distortFrequency;
   }
 
   /**
-   *  @brief The method that will be called to apply a distortion on a set of data.
+   *  @brief The method that will be called to apply a distortion on an image.
    *
-   *  @param data The set of data to apply the distortion on.
+   *  @param data The set of data on which to apply the transformations.
    *
-   *  @return Returns the distorted data.
+   *  @return Returns the distorted image.
    */
   abstract public double[][] distort(double[][] data);
 
