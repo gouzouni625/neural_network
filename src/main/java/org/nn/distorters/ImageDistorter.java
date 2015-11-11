@@ -3,6 +3,11 @@ package org.nn.distorters;
 import org.improc.core.Core;
 import org.improc.image.Image;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.util.Random;
 
 /** @class ImageDistorter
@@ -31,78 +36,45 @@ public class ImageDistorter extends Distorter{
   /**
    *  @brief The method that will be called to apply a distortion on an image.
    *
-   *  @param data The set of data on which to apply the transformations.
+   *  @param image The set of data on which to apply the transformations.
    *
    *  @return Returns the distorted image.
    */
-  public double[][] distort(double[][] data){
+  public BufferedImage distort(BufferedImage image){
     Random random = new Random();
-    double destortionType, parameter;
-    double[][] affineMatrix = new double[2][2];
+    double distortionType = random.nextDouble();
 
-    parameter = ((2 * random.nextDouble() - 1) / 12) * Math.PI; // Angle.
-    affineMatrix[0][0] = Math.cos(parameter);
-    affineMatrix[0][1] = Math.sin(parameter);
-    affineMatrix[1][0] = -Math.sin(parameter);
-    affineMatrix[1][1] = Math.cos(parameter);
+    BufferedImage transformedImage = new BufferedImage(image.getWidth(), image.getHeight(),
+        image.getType());
 
-    Image image = new Image(sampleColumns_, sampleRows_);
-    for(int x = 0;x < sampleColumns_;x++){
-      for(int y = 0;y < sampleRows_;x++){
-        image.setPixel(x, y, (byte)(data[y][x] * 100));
-      }
+    if(distortionType < 0.25){ // Rotating. [-pi/12, pi/12).
+      double parameter = ((2 * random.nextDouble() - 1) / 12) * Math.PI; // Angle.
+
+      new AffineTransformOp(AffineTransform.getRotateInstance(parameter, image.getWidth() / 2,
+          image.getHeight() / 2), AffineTransformOp.TYPE_BILINEAR).filter(image, transformedImage);
     }
-    image = Core.affineTransformRotate(image, affineMatrix);
-    for(int x = 0;x < sampleColumns_;x++){
-      for(int y = 0;y < sampleRows_;x++){
-        data[y][x] = (double)image.getPixel(x, y) / 100;
-      }
+    else if(distortionType < 0.5){  // Scaling. [0.85, 1.15).
+      // Volume for horizontal axis.
+      double parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
+
+      new AffineTransformOp(AffineTransform.getScaleInstance(parameter, parameter),
+          AffineTransformOp.TYPE_BILINEAR).filter(image, transformedImage);
     }
-    return data;
-    /*for(int i = 0;i < data.length;i++){
-      destortionType = random.nextDouble();
+    else if(distortionType < 0.75){  // Shearing. [-0.15, 0.15).
+      double parameter = ((2 * random.nextDouble() - 1) * 15 / 100);
 
-      if(destortionType < 0.25){ // Rotating. [-pi/12, pi/12).
-        parameter = ((2 * random.nextDouble() - 1) / 12) * Math.PI; // Angle.
+      new AffineTransformOp(AffineTransform.getShearInstance(parameter, parameter),
+          AffineTransformOp.TYPE_BILINEAR).filter(image, transformedImage);
+    }
+    else{ // translating [-5, 5).
+      double parameterX = (2 * random.nextDouble() - 1) * 5;
+      double parameterY = (2 * random.nextDouble() - 1) * 5;
 
-      }
-      else if(destortionType < 0.5){  // Scaling. [0.85, 1.15).
-        // Volume for horizontal axis.
-        parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
-        trfMtx.put(0, 0, parameter); trfMtx.put(0, 1, 0); trfMtx.put(0, 2, 0);
+      new AffineTransformOp(AffineTransform.getTranslateInstance(parameterX, parameterY),
+          AffineTransformOp.TYPE_BILINEAR).filter(image, transformedImage);
+    }
 
-        // Volume for vertical axis.
-        parameter = ((2 * random.nextDouble() - 1) * 15 / 100) + 1;
-        trfMtx.put(1, 0, 0); trfMtx.put(1, 1, parameter); trfMtx.put(1, 2, 0);
-      }
-      else if(destortionType < 0.75){  // Shearing. [-0.15, 0.15).
-        parameter = ((2 * random.nextDouble() - 1) * 15 / 100);
-        trfMtx.put(0, 0, 1); trfMtx.put(0, 1, parameter); trfMtx.put(0, 2, 0);
-        trfMtx.put(1, 0, 0); trfMtx.put(1, 1, 1); trfMtx.put(1, 2, 0);
-      }
-      else{ // translating [-5, 5).
-        parameter = (2 * random.nextDouble() - 1) * 5;
-        trfMtx.put(0, 0, 1); trfMtx.put(0, 1, 0); trfMtx.put(0, 2, parameter);
-
-        parameter = (2 * random.nextDouble() - 1) * 5;
-        trfMtx.put(1, 0, 0); trfMtx.put(1, 1, 1); trfMtx.put(1, 2, parameter);
-      }
-
-      for(int j = 0;j < sampleRows_;j++){
-        for(int k = 0;k < sampleColumns_;k++){
-          image.put(j, k, data[i][j * sampleColumns_ + k]);
-        }
-      }
-
-      Imgproc.warpAffine(image, image, trfMtx, image.size());
-
-      for(int j = 0;j < sampleRows_;j++){
-        for(int k = 0;k < sampleColumns_;k++){
-          data[i][j * sampleColumns_ + k] = image.get(j, k)[0];
-        }
-      }
-
-    }*/
+    return transformedImage;
   }
 
   /**

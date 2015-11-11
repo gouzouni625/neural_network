@@ -1,6 +1,6 @@
 package org.nn.distorters;
 
-import org.improc.image.Image;
+import java.awt.image.BufferedImage;
 
 /** @class Distorter
  *
@@ -30,11 +30,11 @@ public abstract class Distorter{
   /**
    *  @brief The method that will be called to apply a distortion on an image.
    *
-   *  @param data The set of data on which to apply the transformations.
+   *  @param image The set of data on which to apply the transformations.
    *
    *  @return Returns the distorted image.
    */
-  abstract public double[][] distort(double[][] data);
+  abstract public BufferedImage distort(BufferedImage image);
 
   /**
    *  @brief Setter method for the distortion frequency.
