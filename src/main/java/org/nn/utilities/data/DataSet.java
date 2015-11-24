@@ -328,6 +328,14 @@ public class DataSet{
     return dataSet;
   }
 
+  public void remove(int index) {
+    samples_.remove(index);
+  }
+
+  public void remove(DataSample sample) {
+    samples_.remove(sample);
+  }
+
   private ArrayList<DataSample> samples_; //!< The DataSample objects of this DataSet.
 
   public static final int DATA_MAGIC_NUMBER = 0x00000803; //!< The magic number to be used for data.
