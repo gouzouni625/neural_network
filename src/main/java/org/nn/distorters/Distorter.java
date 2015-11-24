@@ -36,6 +36,8 @@ public abstract class Distorter{
    */
   abstract public BufferedImage distort(BufferedImage image);
 
+  abstract public double[][] distort(double[][] data);
+
   /**
    *  @brief Setter method for the distortion frequency.
    *

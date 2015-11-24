@@ -1,13 +1,9 @@
 package org.nn.distorters;
 
-import org.improc.core.Core;
-import org.improc.image.Image;
-
-import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
+import java.awt.image.DataBufferByte;
 import java.util.Random;
 
 /** @class ImageDistorter
@@ -75,6 +71,79 @@ public class ImageDistorter extends Distorter{
     }
 
     return transformedImage;
+  }
+
+  public double[][] distort(double[][] data) {
+    int numberOfImages = data.length;
+
+    for(int i = 0;i < numberOfImages;i++){
+      BufferedImage image = vectorToBufferedImage(data[i], 64, 64, -1, 1);
+      image = distort(image);
+      data[i] = bufferedImageToVector(image, - 1, 1);
+    }
+
+    return data;
+  }
+
+  public static BufferedImage vectorToBufferedImage(double[] vector, int width, int height,
+                                                    double minValue, double maxValue) {
+    BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+    byte[] pixels = ((DataBufferByte)bufferedImage.getRaster().getDataBuffer()).getData();
+
+    for(int x = 0;x < width;x++) {
+      for(int y = 0;y < height;y++){
+        pixels[x * height + y] = (byte)(((byte)((vector[x * height + y] - minValue) *
+            255 / (maxValue - minValue))) & 0xFF);
+      }
+    }
+
+    return bufferedImage;
+  }
+
+  /**
+   *  @brief Converts an image to a vector of doubles.
+   *
+   *  @param image The OpenCV Mat object that represents the image.
+   *  @param min The minimum value that the vector should have.
+   *  @param max The maximum value that the vector should have.
+   *
+   *  @return Returns the image conversion to a vector.
+   */
+  public static double[] bufferedImageToVector(BufferedImage image, double min, double max){
+    byte[] pixels = ((DataBufferByte)image.getRaster().getDataBuffer()).getData();
+
+    int numberOfPixels = pixels.length;
+    int imageWidth = image.getWidth();
+    int imageHeight = image.getHeight();
+
+    double[] vector = new double[numberOfPixels];
+    int x = 0;
+    int y = imageHeight - 1;
+    for(int i = 0;i < numberOfPixels;i++){
+      vector[y * imageWidth + x] = (pixels[i] & 0xFF) * (max - min) / 255 + min;
+
+      x++;
+      if(x == imageWidth){
+        x = 0;
+        y--;
+      }
+    }
+
+    /*****/
+    /*for(int i = 0;i < 2500;i++){
+      if(vector[i] == -1){
+        System.out.print(0 + " ");
+      }
+      else {
+        System.out.print(1 + " ");
+      }
+      if(i % 50 == 0){
+        System.out.println();
+      }
+    }*/
+    /*****/
+
+    return vector;
   }
 
   /**

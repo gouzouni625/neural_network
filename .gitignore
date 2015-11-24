@@ -16,3 +16,4 @@ dump
 /data
 src/executables/
 /target/
+src/devel
